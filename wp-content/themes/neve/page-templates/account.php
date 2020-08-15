@@ -285,7 +285,8 @@ if ( have_posts() ) {
                 if(index == 1) $("input[name=actAuto]").val('Y');
 
                 e.preventDefault();
-                var currentUrl = $('#theme_url').val() + '/page-templates/account_management/account/' + $(this).attr('action');
+                const currentUrl = $('#theme_url').val() + '/page-templates/account_management/account/' + $(this).attr('action');
+                
 
                 $.ajax({
                     url : currentUrl || window.location.pathname,

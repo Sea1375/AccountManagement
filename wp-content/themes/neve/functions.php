@@ -88,7 +88,8 @@ function aia_styles_scripts() {
 	$theme_path = get_stylesheet_directory_uri();
 	
 	if( is_page_template( 'page-templates/account.php' ) || is_page( 'Account' ) || is_page_template( 'page-templates/contact.php' ) || is_page( 'Contacts' )
-		|| is_page_template( 'page-templates/confirm.php' ) || is_page( 'Confirm' )) { 
+		|| is_page_template( 'page-templates/confirm.php' ) || is_page( 'Confirm' )
+		|| is_page_template( 'page-templates/myfiles.php' ) || is_page( 'MyFiles' ) ) { 
 
 	   	wp_enqueue_style( 'intlTelInput', $theme_path .'/page-templates/account_management/build/css/intlTelInput.css', array( 'neve-style' ) );
 		wp_enqueue_style( 'home_custom', $theme_path .'/page-templates/account_management/home_custom.css', array( 'intlTelInput' ) );
