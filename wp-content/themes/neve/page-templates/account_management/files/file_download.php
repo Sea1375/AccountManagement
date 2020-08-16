@@ -1,50 +1,72 @@
 <?php
-    if($_SERVER['REQUEST_METHOD']=='POST'){
-        if(isset($_FILES["file"])) {
-            //$target_dir = 'e:/temp_uploads';
-            $uploaded_temp_file = $_FILES["file"]["tmp_name"];
-            $target_file_name = basename($_FILES["file"]["name"]);
-            $target_file = $target_dir. '/' . $target_file_name;
-            // move_uploaded_file($uploaded_temp_file, $target_file);
+    include_once("../../../../../../wp-config.php");
+    global $wpdb;
 
-            // get presigned url for aws s3 file upload
+    if($_SERVER['REQUEST_METHOD']=='POST'){
+        if(isset($_POST["filId"])) {
+
+            $userId = $_POST['userId'];
+            $filId = $_POST['filId'];
+
+            $sql = "SELECT FIL_NAME FROM files WHERE FIL_ID = '" . $filId . "'";
+            $target_file_name = $wpdb->get_var($sql);
+
             $cURLConnection = curl_init();
-            $userId = 'u8737';
-            $presigned_request_url = 'https://67qegqceo8.execute-api.us-east-1.amazonaws.com/v1/get-na-presignedurl?user=' . $userId .'&object=' . $target_file_name;
-            echo $presigned_request_url.'<br>';
+
+            $presigned_request_url = 'https://4x7vfzp6vj.execute-api.us-east-1.amazonaws.com/v1/stage-file?user=' . $userId .'&object=' . $target_file_name;
+
             curl_setopt($cURLConnection, CURLOPT_URL, $presigned_request_url);
             curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
 
             $presigned_url = curl_exec($cURLConnection);
             curl_close($cURLConnection);
 
+            //The resource that we want to download.
             $presigned_url = substr($presigned_url, 1, -1);
+            echo $presigned_url;
             
-            // upload file to the presigned url
-            $file_path = $uploaded_temp_file;
-
-            $p_file = fopen($file_path, "rb");
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curl, CURLOPT_BINARYTRANSFER, 1);
-            curl_setopt($curl, CURLOPT_URL, $presigned_url);
+            //The path & filename to save to.
+            $saveTo = 'E:\phpserver\PDF' . "\\" . $target_file_name;
             
-            curl_setopt($curl, CURLOPT_PUT, 1);
-            curl_setopt($curl, CURLOPT_INFILE, $p_file);
-            curl_setopt($curl, CURLOPT_INFILESIZE, filesize($file_path));
+            //Open file handler.
+            $fp = fopen($saveTo, 'w+');
             
-            $result = curl_exec($curl);
-            curl_close($curl);
-
-            header("Content-Type: application/force-download");
-            header("Content-Type: application/octet-stream");
-
-
-            echo $result;
-
-            echo 'result: '.$result. ';';
+            //If $fp is FALSE, something went wrong.
+            if($fp === false){
+                throw new Exception('Could not open: ' . $saveTo);
+            }
+            
+            //Create a cURL handle.
+            $ch = curl_init($presigned_url);
+            
+            //Pass our file handle to cURL.
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            
+            //Timeout if the file doesn't download after 20 seconds.
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+            
+            //Execute the request.
+            curl_exec($ch);
+            
+            //If there was an error, throw an Exception
+            if(curl_errno($ch)){
+                throw new Exception(curl_error($ch));
+            }
+            
+            //Get the HTTP status code.
+            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            
+            //Close the cURL handler.
+            curl_close($ch);
+            
+            //Close the file handler.
+            fclose($fp);
+            
+            if($statusCode == 200){
+                echo 'Downloaded!';
+            } else{
+                echo "Status Code: " . $statusCode;
+            }
         }
     }
 ?>

@@ -9,7 +9,7 @@
     $results = $wpdb->get_results($sql);
 
     if( count($results) ) {
-        $table_html = "<tr><th>Name</th><th>Email</th><th>Phone</th><th>Type</th></th>";
+        $table_html = "<tr><th>Name</th><th>Email</th><th>Phone</th><th>Type</th></tr>";
     }
 
     foreach( $results as $result) {

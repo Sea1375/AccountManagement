@@ -29,7 +29,7 @@ if ( have_posts() ) {
     
     <div class="other_elements">
 		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
-		<input type="hidden" value="<?=home_url();?>" id="site_url"/>
+		<input type="hidden" value="<?=home_url();?>" id="site_url" />
 	</div>
 
     <div class="container mt-5 p-3">
