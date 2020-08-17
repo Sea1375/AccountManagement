@@ -6,22 +6,43 @@ if ( have_posts() ) {
 ?>
 <?php
 
-    $act_plan = '';
-    $readonly = '';
-    $frequency = '';
+    $account_id = wp_get_current_user()->ID;
+    
+    $sql = "SELECT ACT_FIRST_NAME, ACT_PLAN, ACT_ADDRESS_LINE1, ACT_EMAIL, ACT_PHONE,
+      ACT_NOTIF_EMAIL, ACT_NOTIF_SMS, ACT_LAST_NAME, ACT_COUNTRY,
+      ACT_AUTO_PULSE_CHECK, ACT_PULSE_CHECK_FREQ, ACT_ADDRESS_LINE2, ACT_CITY, ACT_STATE_PROVINCE,
+       ACT_POSTAL_CODE, ACT_BIRTH_YEAR FROM account WHERE ACT_ID = '" . $account_id ."'";
+    $results = $wpdb->get_results($sql);
 
-    if(!empty($_GET)){
-        $act_plan = $_GET['plan'];
-    }
+    $act_firstName = $results[0]->ACT_FIRST_NAME;
+    $act_plan = $results[0]->ACT_PLAN;
+    $act_streetLine1 = $results[0]->ACT_ADDRESS_LINE1;
+    $act_emailAddress = $results[0]->ACT_EMAIL;
+    $act_phone = $results[0]->ACT_PHONE;
+    $act_noticeEmail = $results[0]->ACT_NOTIF_EMAIL == 'Y' ? 'checked' : '';
+    $act_noticeSMS = $results[0]->ACT_NOTIF_SMS == 'Y' ? 'checked' : '';
+    $act_lastName = $results[0]->ACT_LAST_NAME;
+    $act_country = $results[0]->ACT_COUNTRY;
+    $act_pulseRadio = $results[0]->ACT_AUTO_PULSE_CHECK == 'Y' ? '' : 'checked';
+    $act_auto = $act_pulseRadio == '' ? 'checked' : '';
+
+    $act_frequency = $results[0]->ACT_PULSE_CHECK_FREQ;
+    $act_streetLine2 = $results[0]->ACT_ADDRESS_LINE2;
+    $act_city = $results[0]->ACT_CITY;
+    $act_stateProvince = $results[0]->ACT_STATE_PROVINCE;
+    $act_postalCode = $results[0]->ACT_POSTAL_CODE;
+    $act_birthYear = $results[0]->ACT_BIRTH_YEAR;
+
+
+
+    $readonly = '';
 
     if($act_plan == 'FREE') {
         $readonly = 'readonly';
-        $frequency = '4';
+        $act_frequency = '4';
     } else if($act_plan == 'STANDARD') {
         $readonly = 'readonly';
-        $frequency = '2';
-    } else {
-
+        $act_frequency = '2';
     }
 
 ?>
@@ -36,15 +57,15 @@ if ( have_posts() ) {
         <h3 class="bg-success text-white p-2 text-center" style="font-family: 'Lobster', cursive;">My Account</h3>
         <!-- class="needs-validation" novalidate -->
         <form action="account_form_action.php" method="POST" id="account" class="needs-validation">
-
-            <input type="hidden" value="<?php  ?>" name="actPlan" />
+            
+            <input type="hidden" value="<?php echo $account_id; ?>" name="accountId" />
             <input type='hidden' value='N' name='actAuto' />
         
             <div class="row m-1 p-2">
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="firstName">First Name (*)</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" name="firstName" required>
+                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" name="firstName" value='<?php echo $act_firstName; ?>' required>
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Please fill out this field.</div>
                     </div>
@@ -52,7 +73,7 @@ if ( have_posts() ) {
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="lastName">Last Name (*)</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" name="lastName"  required>
+                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" name="lastName" value='<?php echo $act_lastName; ?>'  required>
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Please fill out this field.</div>
                     </div>
@@ -65,7 +86,7 @@ if ( have_posts() ) {
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="streetLine1">Street Line 1 (*)</label>
-                                <input type="text" class="form-control" id="streetLine1" placeholder="Enter your street line 1" name="streetLine1" required>
+                                <input type="text" class="form-control" id="streetLine1" placeholder="Enter your street line 1" name="streetLine1" value='<?php echo $act_streetLine1; ?>' required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -73,7 +94,7 @@ if ( have_posts() ) {
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="streetLine2">Street Line 2 (*)</label>
-                                <input type="text" class="form-control" id="streetLine2" placeholder="Enter your street line 2" name="streetLine2" required>
+                                <input type="text" class="form-control" id="streetLine2" placeholder="Enter your street line 2" name="streetLine2" value='<?php echo $act_streetLine2; ?>' required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -83,7 +104,7 @@ if ( have_posts() ) {
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="city">City (*)</label>
-                                <input type="text" class="form-control" id="city" placeholder="Enter your city" name="city" required>
+                                <input type="text" class="form-control" id="city" placeholder="Enter your city" name="city" value='<?php echo $act_city; ?>' required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -91,7 +112,7 @@ if ( have_posts() ) {
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="stateProvince">State/Province</label>
-                                <input type="text" class="form-control" id="stateProvince" placeholder="Enter your state/province" name="stateProvince">
+                                <input type="text" class="form-control" id="stateProvince" placeholder="Enter your state/province" name="stateProvince" value='<?php echo $act_stateProvince; ?>'>
                             </div>
                         </div>
                     </div>
@@ -99,7 +120,7 @@ if ( have_posts() ) {
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="postalCode">Postal Code (*)</label>
-                                <input type="text" class="form-control" id="postalCode" placeholder="Enter your postal code" name="postalCode" required>
+                                <input type="text" class="form-control" id="postalCode" placeholder="Enter your postal code" name="postalCode" value='<?php echo $act_postalCode; ?>' required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -107,7 +128,7 @@ if ( have_posts() ) {
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="sel1">Country (*)</label>
-                                <select class="form-control" id="country" name='country' required></select>
+                                <select class="form-control" id="country" name='country' value='<?php echo $act_country; ?>' required></select>
                             </div>
                         </div>
                     </div>
@@ -126,8 +147,8 @@ if ( have_posts() ) {
             <div class="row mx-1 p-2">
                 <div class="col-12 col-md-6">
                     <div class="form-group">
-                        <label for="emailAdress">Email Address (*)</label>
-                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter your email address" name="emailAddress" required>
+                        <label for="emailAddress">Email Address (*)</label>
+                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter your email address" name="emailAddress" value='<?php echo $act_emailAddress; ?>' required>
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Please fill out this field.</div>
                     </div>
@@ -135,7 +156,7 @@ if ( have_posts() ) {
                 <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="country">Birth Year (*)</label>
-                        <input type="number" class="form-control" id="birthYear" placeholder="Enter your birth year" name="birthYear" required>
+                        <input type="number" class="form-control" id="birthYear" placeholder="Enter your birth year" name="birthYear" value='<?php echo $act_birthYear; ?>' required>
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Please fill out this field.</div>
                     </div>
@@ -144,7 +165,7 @@ if ( have_posts() ) {
             <div class="mx-4 p-2 form-group">
                 <label for="phone">Your mobile number(*)</label><br>
                 <input type='hidden' name='mobileNumber' />
-                <input id="phone" name="phone" type="tel" class="form-control" required>
+                <input id="phone" name="phone" type="tel" class="form-control" value='<?php echo $act_phone; ?>' required>
                 <span id="valid-msg" class="invisible">✓ Valid</span>
                 <span id="error-msg" class="invisible"></span>
             </div>
@@ -154,12 +175,12 @@ if ( have_posts() ) {
                 <div class="row mx-2">
                     <div class="col-12 col-md-3">
                         <label class="checkbox-inline form-check-label">
-                            <input type="checkbox" class="form-check-input" name = 'noticeSMS' id = 'noticeSMS'> SMS
+                            <input type="checkbox" class="form-check-input" name = 'noticeSMS' id = 'noticeSMS' <?php echo $act_noticeSMS; ?> > SMS
                         </label>
                     </div>
                     <div class="col-12 col-md-3">
                         <label class="checkbox-inline form-check-label">
-                            <input type="checkbox" class="form-check-input" name = 'noticeEmail' id = 'noticeEmail'> Email
+                            <input type="checkbox" class="form-check-input" name = 'noticeEmail' id = 'noticeEmail' <?php echo $act_noticeEmail; ?>> Email
                         </label>
                     </div>
                 </div>
@@ -173,12 +194,12 @@ if ( have_posts() ) {
             <div class="m-4 p-2">
                 <label>Please select your pulse check frequency preference:</label>
                 <div class="radio">
-                    <p><input type="radio" name="pulseRadio" checked value = 'every'><span> Every </span> 
-                    <input type="number" id="frequency" placeholder="Enter your frequency" name="frequency" min='1' max='8' <?php echo $readonly; ?> value = '<?php echo $frequency; ?>'> 
-                    <span>  weeks</span></p>
+                    <label><input type="radio" name="pulseRadio" value = 'every' <?php echo $act_pulseRadio; ?> ><span> Every </span> 
+                    <input type="number" id="frequency" placeholder="Enter your frequency" name="frequency" value='<?php echo $act_frequency; ?>' min='1' max='8' <?php echo $readonly; ?> > 
+                    <span>  weeks</span></label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="pulseRadio" value='automatic'> Automatic</label>
+                    <label><input type="radio" name="pulseRadio" value='automatic' <?php echo $act_auto; ?> > Automatic</label>
                 </div>
             </div>
             <div>
