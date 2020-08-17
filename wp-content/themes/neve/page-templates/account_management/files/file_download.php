@@ -26,7 +26,7 @@
             echo $presigned_url;
             
             //The path & filename to save to.
-            $saveTo = 'E:\phpserver\PDF' . "\\" . $target_file_name;
+            $saveTo = 'E:' . "\\" . $target_file_name;
             
             //Open file handler.
             $fp = fopen($saveTo, 'w+');

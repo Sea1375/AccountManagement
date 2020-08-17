@@ -287,7 +287,6 @@ if ( have_posts() ) {
                 e.preventDefault();
                 const currentUrl = $('#theme_url').val() + '/page-templates/account_management/account/' + $(this).attr('action');
                 
-
                 $.ajax({
                     url : currentUrl || window.location.pathname,
                     type: "POST",

@@ -1,25 +1,10 @@
-<?php /* Template Name: Confirm */ ?>
+<?php /* Template Name: Recipient */ ?>
 
 <?php get_header(); ?>
 <?php
 if ( have_posts() ) {
     
-    $current_user = wp_get_current_user();
-    $first_name = $current_user->first_name;
-    $last_name = $current_user->last_name;
     
-    if(!empty($_GET)) {
-        $account_id = $_GET['account_id'];       
-        $sql = "SELECT ACT_FIRST_NAME, ACT_LAST_NAME FROM account WHERE ACT_ID = '" . $account_id . "'";
-        $result = $wpdb->get_results($sql);
-        $act_first_name = $result[0]->ACT_FIRST_NAME;
-        $act_last_name = $result[0]->ACT_LAST_NAME;
-
-        $contact_id = $_GET['contact_id'];
-        $sql = "SELECT CTC_MESSAGE FROM contact WHERE CTC_ACCOUNT_ID = '" . $account_id . "' AND CTC_ID = '" . $contact_id . "'";
-        $ctc_message = $wpdb->get_var($sql);
-
-    }
 ?>
     <div class="other_elements">
 		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
@@ -27,7 +12,7 @@ if ( have_posts() ) {
 	</div>
 
     <div class="container mt-5 p-3">
-        <form action='confirm_form_action.php' method='POST' id='confirm'>
+        <form action='recipient_form_action.php' method='POST' id='recipient'>
             <input type='hidden' name='accountId' value='<?php echo $account_id; ?>' />
             <input type='hidden' name='contactId' value='<?php echo $contact_id; ?>' />
             <div class='m-2 p-2'>
@@ -35,7 +20,8 @@ if ( have_posts() ) {
                 <div class='text mt-3 px-2'>
                     <?php echo $act_first_name . ' ' . $act_last_name; ?> has subscribed to our service named.<br>
                     You can find explanation of what this service does by clicking <a href="#" id='home'>here</a><br>
-                    In order to initiate the document release process, and as per <?php echo $act_first_name; ?> `s, we need to make sure <?php echo $act_first_name . '.'; ?>
+                    As per <?php echo $act_first_name; ?> `s, you will find below file(s) he wants you to receive:
+                    For your information, the files(s) will be available for download until 
                 </div>
             </div>
                     
@@ -107,7 +93,7 @@ if ( have_posts() ) {
     <script>
         var route = '<?=home_url();?>' + '/sample-page/';
         $("#home").attr("href", route);
-        
+
         $(document).ready(function () {
             $('#confirm').on('submit', function(e) {
 
