@@ -84,7 +84,7 @@ if ( have_posts() ) {
                 </div>
             </form>
         </div>
-        <div class='my-2 bg-warning invisible text-center' id='del_and_down'></div>
+        <div class='my-2 p-2 bg-warning invisible text-center' id='del_and_down'></div>
 <!--
         <div id="downloadModal" class="modal fade" tabindex="-1">
             <form method="post" enctype="multipart/form-data" id='file_download' action='file_download.php'>
@@ -114,8 +114,7 @@ if ( have_posts() ) {
         </div>
 -->
     </div>
-
-
+    
     <script>
         
         var fil_ids;
