@@ -43,7 +43,7 @@
             ACT_NOTIF_EMAIL = '" . $act_notif_email . "', 
             ACT_PULSE_CHECK_FREQ = '" . $act_pulse_check_freq . "', 
             ACT_AUTO_PULSE_CHECK = '" . $act_auto . "', 
-            ACT_LAST_UPDATE = '" . $current_time . "' WHERE ACT_ID = '" . $act_accountId . "'";
+            ACT_LAST_UPDATE = '" . $current_time . "' WHERE ACT_USER_ID = '" . $act_accountId . "'";
 
         $wpdb->query($sql); 
         echo "Successful";

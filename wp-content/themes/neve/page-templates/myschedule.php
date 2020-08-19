@@ -4,7 +4,7 @@
 <?php
 if ( have_posts() ) {
     $account_id = wp_get_current_user()->ID;
-
+    echo $account_id;
 ?>
 
     <div class="other_elements">
@@ -21,13 +21,13 @@ if ( have_posts() ) {
                 </div>
             </div>
             <div class="d-flex justify-content-around mb-3">
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addModal" onclick='filename_recipient()'>Add</button>
+                <button type="button" class="btn btn-info" onclick='filename_recipient()'>Add</button>
                 <button type="button" class="btn btn-info" onclick='delete_modal_check()'>Delete</button>
                 <button type="button" class="btn btn-info" onclick='update_modal_check()'>Update</button>
             </div>
         </div>
         
-        <div id="addModal" class="modal fade" tabindex="-1">
+        <div id="addModal" class="modal fade" tabindex="-1" role="dialog">
             <form method="post" enctype="multipart/form-data" id='schedule' action='schedule_add.php'>
                 <input type='hidden' value='D' name='selection' />
                 <input type='hidden' name='fil_id' />
@@ -151,6 +151,7 @@ if ( have_posts() ) {
         }
         
         function filename_recipient() {
+            console.log($('input[name=accountId]').val());
             $.ajax({
                 type: "POST",
                 url: $('#theme_url').val() + '/page-templates/account_management/myschedule/filename_recipient.php',
@@ -161,6 +162,14 @@ if ( have_posts() ) {
                     ctc_ids = result.ctc_ids;
                     $('#filenameTable').html(result.filename);              
                     $('#recipientTable').html(result.recipient);
+                    console.log(result.filename, ' ', result.recipient);
+                    if(result.filename != null && result.recipient != null) {
+                        $('#alert_main').addClass('invisible');
+                        $('#addModal').modal();
+                    } else {
+                        $('#alert_main').removeClass('invisible');
+                        $('#alert_main').html('File or recipient is not exist.');
+                    }
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     alert(errorThrown);

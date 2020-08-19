@@ -7,7 +7,7 @@ if ( have_posts() ) {
 <?php
 
     $account_id = wp_get_current_user()->ID;
-    
+
     $sql = "SELECT ACT_FIRST_NAME, ACT_PLAN, ACT_ADDRESS_LINE1, ACT_EMAIL, ACT_PHONE,
       ACT_NOTIF_EMAIL, ACT_NOTIF_SMS, ACT_LAST_NAME, ACT_COUNTRY,
       ACT_AUTO_PULSE_CHECK, ACT_PULSE_CHECK_FREQ, ACT_ADDRESS_LINE2, ACT_CITY, ACT_STATE_PROVINCE,
@@ -33,8 +33,6 @@ if ( have_posts() ) {
     $act_postalCode = $results[0]->ACT_POSTAL_CODE;
     $act_birthYear = $results[0]->ACT_BIRTH_YEAR;
 
-
-
     $readonly = '';
 
     if($act_plan == 'FREE') {
@@ -47,13 +45,17 @@ if ( have_posts() ) {
 
 ?>
     <!-- User definition -->
-    
+
+
     <div class="other_elements">
 		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
 		<input type="hidden" value="<?=home_url();?>" id="site_url" />
 	</div>
 
     <div class="container mt-5 p-3">
+        <div class='test'>
+            <h1>This is test.</h1>
+        </div>
         <h3 class="bg-success text-white p-2 text-center" style="font-family: 'Lobster', cursive;">My Account</h3>
         <!-- class="needs-validation" novalidate -->
         <form action="account_form_action.php" method="POST" id="account" class="needs-validation">
@@ -133,11 +135,9 @@ if ( have_posts() ) {
                         </div>
                     </div>
                     <div class="form-check mb-2 mr-sm-2">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="addressCheck" required> I certify I live in the country mentioned above
-                            <div class="valid-feedback">Valid.</div>
-                            <div class="invalid-feedback">Check this checkbox to continue.</div>
-                        </label>
+                        <input type="checkbox" name="addressCheck" required> I certify I live in the country mentioned above
+                        <div class="valid-feedback">Valid.</div>
+                        <div class="invalid-feedback">Check this checkbox to continue.</div>
                     </div>    
                 </div>
                 <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
@@ -166,7 +166,7 @@ if ( have_posts() ) {
                 <label for="phone">Your mobile number(*)</label><br>
                 <input type='hidden' name='mobileNumber' />
                 <input id="phone" name="phone" type="tel" class="form-control" value='<?php echo $act_phone; ?>' required>
-                <span id="valid-msg" class="invisible">✓ Valid</span>
+                <span id="valid-msg" class="invisible">Valid</span>
                 <span id="error-msg" class="invisible"></span>
             </div>
             
@@ -184,11 +184,13 @@ if ( have_posts() ) {
                         </label>
                     </div>
                 </div>
+                <!--
                 <div class="form-group">
                     <input type="type" name='forNotice' class='invisible' required>
                     <div class="valid-feedback">Valid.</div>
                     <div class="invalid-feedback">Please fill out one field at least.</div>
                 </div>
+                -->
             </div>
 
             <div class="m-4 p-2">
@@ -323,9 +325,10 @@ if ( have_posts() ) {
         });
     </script>
     <script>
-    
+        
         (function() {
             'use strict';
+            console.log($('#country').val());
             $.ajax({
                 type: "POST",
                 url: $('#theme_url').val() + '/page-templates/account_management/account/account_birthday.php',
@@ -341,7 +344,7 @@ if ( have_posts() ) {
                     alert(errorThrown);
                 }
             });
-            
+/*            
             var checkCount = 0;
 
             $('input[name=noticeSMS]').change(function(){
@@ -362,7 +365,7 @@ if ( have_posts() ) {
                 if(checkCount > 0) $('input[name=forNotice]').val('FILL');
                 else $('input[name=forNotice]').val('');
             });
-
+*/
             window.addEventListener('load', function() {
                 // Get the forms we want to add validation styles to
                 var forms = document.getElementsByClassName('needs-validation');

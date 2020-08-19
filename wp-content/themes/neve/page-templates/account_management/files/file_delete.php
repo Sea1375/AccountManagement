@@ -26,6 +26,8 @@
             
             $sql = "DELETE FROM files WHERE FIL_ID = '" . $filId . "'";
             $wpdb->query($sql);
+            $sql = "DELETE FROM schedule WHERE SCH_FILE_ID = '" . $filId . "'";
+            $wpdb->query($sql);
             
             echo 'deleted';
 
