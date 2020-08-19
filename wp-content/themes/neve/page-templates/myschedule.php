@@ -3,14 +3,8 @@
 
 <?php
 if ( have_posts() ) {
-    $current_user = wp_get_current_user();
-    $first_name = $current_user->first_name;
-    $last_name = $current_user->last_name;
-    
-    if(!empty($_GET)) {
-        $account_id = $_GET['account_id'];
+    $account_id = wp_get_current_user()->ID;
 
-    }
 ?>
 
     <div class="other_elements">

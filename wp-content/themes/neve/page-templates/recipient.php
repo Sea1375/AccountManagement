@@ -8,16 +8,14 @@ if ( have_posts() ) {
     $first_name = $current_user->first_name;
     $last_name = $current_user->last_name;
     
-    $sql = "SELECT CTC_ID FROM contact WHERE CTC_WP_USER_ID = '" . $current_user->ID . "'";
-    $contact_id = $wpdb->get_var($sql);
+    $sql = "SELECT ACT_ID, ACT_FIRST_NAME,ACT_LAST_NAME FROM ACCOUNT, CONTACT where ACT_ID = CTC_ACCOUNT_ID and ACT_WP_USER_ID = '" . $current_user->ID . "'";
+    $result = $wpdb->get_results($sql);
 
-    if(!empty($_GET)) {
-        $account_id = $_GET['account_id'];
-        $sql = "SELECT ACT_FIRST_NAME, ACT_LAST_NAME FROM account WHERE ACT_ID = '" . $account_id . "'";
-        $result = $wpdb->get_results($sql);
-        $act_first_name = $result[0]->ACT_FIRST_NAME;
-        $act_last_name = $result[0]->ACT_LAST_NAME;
-    }
+    $account_id = $result[0]->ACT_ID;
+    $act_first_name = $result[0]->ACT_FIRST_NAME;
+    $act_last_name = $result[0]->ACT_LAST_NAME;
+
+    $contact_id = $current_user->ID;
     
     $pln_expiry_days = $wpdb->get_var("SELECT PLN_EXPIRY_DAYS FROM account, plan WHERE ACT_ID = '" . $account_id . "' AND ACT_PLAN = PLN_CODE");
     $cnf_conf_date = $wpdb->get_var("SELECT CNF_CONF_DATE FROM confirm WHERE CNF_ACCOUNT_ID = '" . $account_id . "' AND CNF_CONTACT_ID = '" . $contact_id . "'");
@@ -55,9 +53,9 @@ if ( have_posts() ) {
         <div class='m-2 p-2'>
             <h3>Dear <b><?php echo '  ' . $first_name . ' ' . $last_name . ','; ?></b></h3>
             <div class='text mt-3 px-2'>
-                <b><?php echo $act_first_name . ' ' . $act_last_name; ?></b> has subscribed to our service named.<br>
+                <b><?php echo $act_first_name . ' ' . $act_last_name; ?></b> has subscribed to our service named Need2TellYou.<br>
                 You can find explanation of what this service does by clicking <a href="#" id='home'>here</a><br>
-                As per <b><?php echo $act_first_name; ?></b> `s, you will find below file(s) he wants you to receive:
+                As per <b><?php echo $act_first_name; ?></b> `s wish, you will find below file(s) he wants you to receive:
                 For your information, the files(s) will be available for download until <b><?php echo $until_max; ?></b>
             </div>
         </div>

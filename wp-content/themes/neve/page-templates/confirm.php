@@ -8,18 +8,16 @@ if ( have_posts() ) {
     $first_name = $current_user->first_name;
     $last_name = $current_user->last_name;
     
-    if(!empty($_GET)) {
-        $account_id = $_GET['account_id'];       
-        $sql = "SELECT ACT_FIRST_NAME, ACT_LAST_NAME FROM account WHERE ACT_ID = '" . $account_id . "'";
-        $result = $wpdb->get_results($sql);
-        $act_first_name = $result[0]->ACT_FIRST_NAME;
-        $act_last_name = $result[0]->ACT_LAST_NAME;
-
-        $contact_id = $_GET['contact_id'];
-        $sql = "SELECT CTC_MESSAGE FROM contact WHERE CTC_ACCOUNT_ID = '" . $account_id . "' AND CTC_ID = '" . $contact_id . "'";
-        $ctc_message = $wpdb->get_var($sql);
-
-    }
+   
+    $sql = "SELECT ACT_FIRST_NAME,ACT_LAST_NAME FROM ACCOUNT, CONTACT where ACT_ID = CTC_ACCOUNT_ID and ACT_WP_USER_ID = '" . $current_user->ID . "'";
+    $result = $wpdb->get_results($sql);
+    $act_first_name = $result[0]->ACT_FIRST_NAME;
+    $act_last_name = $result[0]->ACT_LAST_NAME;
+    
+    $contact_id = $current_user->ID;
+    $sql = "SELECT CTC_MESSAGE FROM contact WHERE CTC_ACCOUNT_ID = '" . $account_id . "' AND CTC_ID = '" . $contact_id . "'";
+    $ctc_message = $wpdb->get_var($sql);
+    
 ?>
     <div class="other_elements">
 		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
@@ -28,14 +26,13 @@ if ( have_posts() ) {
 
     <div class="container mt-5 p-3">
         <form action='confirm_form_action.php' method='POST' id='confirm'>
-            <input type='hidden' name='accountId' value='<?php echo $account_id; ?>' />
             <input type='hidden' name='contactId' value='<?php echo $contact_id; ?>' />
             <div class='m-2 p-2'>
                 <h3>Dear <?php echo '  ' . $first_name . ' ' . $last_name . ','; ?></h3>
                 <div class='text mt-3 px-2'>
-                    <?php echo $act_first_name . ' ' . $act_last_name; ?> has subscribed to our service named.<br>
+                    <?php echo $act_first_name . ' ' . $act_last_name; ?> has subscribed to our service named Need2TellYou.<br>
                     You can find explanation of what this service does by clicking <a href="#" id='home'>here</a><br>
-                    In order to initiate the document release process, and as per <?php echo $act_first_name; ?> `s, we need to make sure <?php echo $act_first_name . '.'; ?>
+                    In order to initiate the document release process, and as per <?php echo $act_first_name; ?> `s wish, we need to make sure <?php echo $act_first_name; ?> Is dead.
                 </div>
             </div>
                     
@@ -44,12 +41,12 @@ if ( have_posts() ) {
                 <div class='text mt-3 px-2'><h6><?php echo $ctc_message; ?></h6></div>
             </div>
                 
-            <div class="m-2 p-2 mt-5">
+            <div class="m-1 p-2">
                 <h5>Please fill the information below and click 'Save' when done. We thank you for your help.</h5>
-                <div>
-                    <div class='my-2 p-2 text mt-4'>
-                        <h6>I confirm <?php echo $act_first_name; ?></h6>
-                        <div class='row'>
+                <div class='mt-3'>
+                    <div class='radio'>
+                        <label><input type="radio" name="confirmRadio" checked> I confirm <?php echo $act_first_name; ?> Is dead.</label>
+                        <div class='row mx-5'>
                             <div class='col-sm-1'>
                                 <h6>Date</h6>
                             </div>
@@ -58,15 +55,11 @@ if ( have_posts() ) {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="m-1 p-2">
-                <div class='mt-3'>
                     <div class="radio">
-                        <label><input type="radio" name="confirmRadio" checked> I cannot confirm <?php echo $act_first_name; ?></label>
+                        <label><input type="radio" name="confirmRadio" checked> I cannot confirm <?php echo $act_first_name; ?> Is dead.</label>
                     </div>  
                     <div class="radio">
-                        <label><input type="radio" name="confirmRadio"><?php echo ' ' . $act_first_name; ?></label>
+                        <label><input type="radio" name="confirmRadio"><?php echo ' ' . $act_first_name; ?>is dead but don’t know the date of the death. </label>
                     </div>
                     <input type='hidden' value='NOCONFIRM' name='actAuto' />
                 </div>

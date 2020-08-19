@@ -16,7 +16,7 @@ if ( have_posts() ) {
         </div>
         <div class='m-2 p-3'>
         <div class="d-flex justify-content-around mb-3">
-            <button class='btn btn-info' onclick='close_window()'>Close</button>
+            <a id='close'><button class='btn btn-info' onclick='close_window()'>Close</button></a>
             <a id='contact'><button class='btn btn-info'>Check contacts Info</button></a>
             <a href='' id='home'><button class='btn btn-info'>Home page</button></a>
         </div>
@@ -34,7 +34,8 @@ if ( have_posts() ) {
         route = '<?=home_url();?>' + '/sample-page/';
         $("#home").attr("href", route);
         
-        window.location.href = "close.html";
+        route = '<?=home_url();?>' + '/thank-you/';
+        $("#close").attr("href", route);
         
     </script>
 <?php

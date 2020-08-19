@@ -24,7 +24,8 @@
               
             // get presigned url for aws s3 file upload
             $cURLConnection = curl_init();
-            $userId = $account_id;
+            $userId = 'u' . str_pad($account_id, 7 , '0' , STR_PAD_LEFT);
+            
             $presigned_request_url = 'https://67qegqceo8.execute-api.us-east-1.amazonaws.com/v1/get-na-presignedurl?user=' . $userId .'&object=' . $target_file_name;
             
             curl_setopt($cURLConnection, CURLOPT_URL, $presigned_request_url);

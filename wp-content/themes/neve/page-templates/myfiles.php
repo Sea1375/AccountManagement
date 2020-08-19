@@ -4,9 +4,7 @@
 <?php
 if ( have_posts() ) {
 
-    if(!empty($_GET)) {
-        $account_id = $_GET['account_id'];
-    }
+    $account_id = wp_get_current_user()->ID;
 
 ?>
 
@@ -55,7 +53,7 @@ if ( have_posts() ) {
             <div class="d-flex justify-content-around mb-3">
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addModal">Add</button>
                 <button type="button" class="btn btn-info" onclick='file_delete()'>Delete</button>
-                <button type="button" class="btn btn-info" onclick='file_download()'>Download</button>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#downloadModal">Download</button>
             </div>
         </div>
 
@@ -85,7 +83,7 @@ if ( have_posts() ) {
             </form>
         </div>
         <div class='my-2 p-2 bg-warning invisible text-center' id='del_and_down'></div>
-<!--
+
         <div id="downloadModal" class="modal fade" tabindex="-1">
             <form method="post" enctype="multipart/form-data" id='file_download' action='file_download.php'>
                 <div class="modal-dialog">
@@ -102,9 +100,10 @@ if ( have_posts() ) {
                                     <label class="custom-file-label" for="downloadFile">Choose Destination</label>
                                 </div>
                             </div>
+                            <div class='my-2 p-2 bg-warning invisible text-center' id='down'></div>
                         </div>
                         <div class="modal-footer">
-                            <input type='submit' class='bg-info' value='Download' />
+                            <button type="button" class="btn btn-info" onclick='file_download()'>Download</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -112,7 +111,7 @@ if ( have_posts() ) {
                 
             </form>
         </div>
--->
+
     </div>
     
     <script>
@@ -156,6 +155,8 @@ if ( have_posts() ) {
                         } else {
                             $('#alert').html('<h6>Upload is succeeded.</h6>');
                             refresh_table();
+                            $('#del_and_down').removeClass('invisible');
+                            $('#del_and_down').html('<h6>The Upload is succeeded.</h6>');
                         }
                     },
                     error: function (jXHR, textStatus, errorThrown) {
@@ -164,10 +165,6 @@ if ( have_posts() ) {
                         alert(errorThrown);
                     }
                 });
-            });
-
-            $('#file_download').on('submit', function(e) {
-
             });
         });
 
@@ -197,29 +194,6 @@ if ( have_posts() ) {
             });
         }
 
-        function file_download() {
-            if($('input[name=fil_id]').val() == '') {
-                alert('Please select a file to download.');
-            }
-            $.ajax({
-                type: "POST",
-                url: $('#theme_url').val() + '/page-templates/account_management/files/file_download.php',
-                data: { 
-                    userId: $('input[name=accountId]').val(),
-                    filId: $('input[name=fil_id]').val()
-                }, 
-                success:function(data){
-                    console.log(data);
-                    $('#del_and_down').removeClass('invisible');
-                    $('#del_and_down').html('<h6>The Download is succeeded.</h6>');
-                },
-                error: function (jXHR, textStatus, errorThrown) {
-                    alert(errorThrown);
-                    $('#del_and_down').removeClass('invisible');
-                    $('#del_and_down').html('<h6>The Download is failed.</h6>');
-                }
-            });
-        }
 
         function file_delete() {
             if($('input[name=fil_id]').val() == '') {
@@ -244,6 +218,32 @@ if ( have_posts() ) {
                     $('#del_and_down').html('<h6>The Delete is failed.</h6>');
                 }
             });
+        }
+
+        function file_download() {
+            if($('input[name=fil_id]').val() == '') {
+                    $('#down').removeClass('invisible');
+                    $('#down').html('<h6>Please a file to download.</h6>');
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: $('#theme_url').val() + '/page-templates/account_management/files/file_download.php',
+                    data: { 
+                        userId: $('input[name=accountId]').val(),
+                        filId: $('input[name=fil_id]').val()
+                    }, 
+                    success:function(data){
+                        console.log(data);
+                        $('#del_and_down').removeClass('invisible');
+                        $('#del_and_down').html('<h6>The Download is succeeded.</h6>');
+                    },
+                    error: function (jXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                        $('#del_and_down').removeClass('invisible');
+                        $('#del_and_down').html('<h6>The Download is failed.</h6>');
+                    }
+                });
         }
     </script>
 

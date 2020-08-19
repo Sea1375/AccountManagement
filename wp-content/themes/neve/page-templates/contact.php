@@ -8,14 +8,10 @@ if ( have_posts() ) {
 
     <!-- User definition -->
 <?php
-    $ctc_account_id = '';
-    if(!empty($_GET)){
-        $ctc_account_id = $_GET['account_id'];
-    }
+    $ctc_account_id = wp_get_current_user()->ID;;
     
     $sql = "SELECT MAX(CTC_ID) FROM contact";
     $userID = $wpdb->get_var($sql) + 1;
-    
     $password = wp_generate_password ( $length = 12, $special_chars = true, $extra_special_chars = false );
     
 ?>    

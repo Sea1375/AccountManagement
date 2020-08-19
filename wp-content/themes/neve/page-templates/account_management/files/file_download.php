@@ -5,14 +5,15 @@
     if($_SERVER['REQUEST_METHOD']=='POST'){
         if(isset($_POST["filId"])) {
 
-            $userId = $_POST['userId'];
+            $account_id = $_POST['userId'];
             $filId = $_POST['filId'];
 
             $sql = "SELECT FIL_NAME FROM files WHERE FIL_ID = '" . $filId . "'";
             $target_file_name = $wpdb->get_var($sql);
             
             $cURLConnection = curl_init();
-
+            
+            $userId = 'u' . str_pad($account_id, 7 , '0' , STR_PAD_LEFT);
             $presigned_request_url = 'https://4x7vfzp6vj.execute-api.us-east-1.amazonaws.com/v1/stage-file?user=' . $userId .'&object=' . $target_file_name;
 
             curl_setopt($cURLConnection, CURLOPT_URL, $presigned_request_url);
