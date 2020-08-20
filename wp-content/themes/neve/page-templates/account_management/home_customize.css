@@ -28,4 +28,28 @@
     body {
         background: #f0f0f0;
     }
+    .form-field{
+        background: white;
+        border-radius: 25px;
+    }
+    button {
+        background-color: darkblue;
+        color: white;
+        font-size: 20px;
+        width: 180px;
+        height: 35px;
+        border-radius: 15px;
+        font-family: revert;
+        text-align: center;
+        padding: 0px;
+    }
+    .close {
+        width: 35px;
+        height: 35px;
+    }
+    .modal_button {
+        width: 120px;
+        height: 35px;
+        font-size: 16px;
+    }
 

@@ -8,10 +8,8 @@
    
     $results = $wpdb->get_results($sql);
 
-    if( count($results) ) {
-        $table_html = "<tr><th>Name</th><th>Email</th><th>Phone</th><th>Type</th></tr>";
-    }
-
+    $table_html = "<tr><th>Name</th><th>Email</th><th>Phone</th><th>Type</th></tr>";
+    
     foreach( $results as $result) {
         $ctc_ids = $ctc_ids . ' '. $result->CTC_ID;
         $table_html = $table_html . '<tr onclick="row_click(this)"><td>' . $result->CTC_FIRST_NAME . ' '. $result->CTC_LAST_NAME . '</td>';

@@ -21,145 +21,149 @@ if ( have_posts() ) {
     </div>
     
     <div class="container mt-5 p-3">
-        <h3 class="bg-success text-white p-2 text-center" style="font-family: 'Lobster', cursive;">My Contacts</h3>
+
+        <h2 class="p-2 mx-3"><strong>My Contacts</strong></h2>
+
         <div class="m-4" style="max-height: 200px; overflow: auto;">
             <div class="table-responsive-sm">
                 <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='contactTable'>
                 </table>
             </div>
         </div>
-        <div class="row m-1 p-2">
-            <div class="col-md-3"></div>
-            <div class="col-md-3">
-                <button class="form-control btn btn-success text-white" onclick='add_fill()'>Add</button>
-            </div>
-            <div class="col-md-3">
-                <button class="form-control btn btn-warning text-white" onclick='delete_row()'>Delete</button>
-            </div>
+
+        <div class="d-flex justify-content-around m-3">
+            <button type="button" onclick='add_fill()'>Add</button>
+            <button type="button" onclick='delete_row()'>Delete</button>
         </div>
 
-        <form action="contact_form_action.php" method="POST" id="contact" name='contact' class="needs-validation">
-            <input type = 'hidden' name='accountId' value=<?php echo $ctc_account_id; ?> id='accountId' />
-            <input type='hidden' id='ctc_id' name='ctc_id' />
-            <div class="card mx-4 p-2">
-                <div class="row mx-1 p-2">
+        <div class='form-field p-5'>
+            <form action="contact_form_action.php" method="POST" id="contact" name='contact' class="needs-validation" novalidate>
+                <input type = 'hidden' name='accountId' value=<?php echo $ctc_account_id; ?> id='accountId' />
+                <input type='hidden' id='ctc_id' name='ctc_id' />
+
+                <div class='mx-5 p-2'><h4 class='mx-5'>Contact Information</h4></div>
+
+                <div class="row m-3 p-2">
                     <div class="col-12 col-md-4">
-                        <div class="form-group">
+                        <div class="form-group mx-3">
                             <label for="firstName">First Name (*)</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" name="firstName" required />
+                            <input type="text" class="form-control input-lg" id="firstName" placeholder="Enter your first name" name="firstName" required />
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="form-group">
+                        <div class="form-group mx-3">
                             <label for="lastName">Last Name (*)</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" name="lastName" required />
+                            <input type="text" class="form-control input-lg" id="lastName" placeholder="Enter your last name" name="lastName" required />
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
-                        <div class="form-group">
+                        <div class="form-group mx-3">
                             <label for="emailAdress">Email Address (*)</label>
-                            <input type="email" class="form-control" id="emailAddress" placeholder="Enter your email address" name="emailAddress" required />
+                            <input type="email" class="form-control input-lg" id="emailAddress" placeholder="Enter your email address" name="emailAddress" required />
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                     </div>
                 </div>
+                    
 
-                <div class="mx-4 form-group">
-                    <label for="phone">Your mobile number(*)</label><br>
-                    <input type='hidden' name='mobileNumber' />
-                    <input id="phone" name="phone" type="tel" class="form-control" required />
-                    <span id="valid-msg" class="invisible">✓ Valid</span>
-                    <span id="error-msg" class="invisible"></span>
-                </div>
+                    <div class="mx-4 form-group">
+                        <label for="phone">Your mobile number(*)</label><br>
+                        <input type='hidden' name='mobileNumber' />
+                        <input id="phone" name="phone" type="tel" class="form-control" required />
+                        <span id="valid-msg" class="invisible">✓ Valid</span>
+                        <span id="error-msg" class="invisible"></span>
+                    </div>
 
-                <div class="row mx-2">
-                    <div class="col-12 col-md-6">
+                    <div class="row mx-2">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="sel1">Country of residence (*)</label>
+                                <select class="form-control" id="country" name='country' required></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check mx-4">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="addressCheck" required> I certify I live in the country mentioned above
+                        </label>
+                    </div>
+
+                    <div class="card m-4 p-2" style="position: relative;">
+                        <div class="row mt-3">
+                            <div class="col-12 col-lg-2">
+                                <div class="radio">
+                                    <label><input type="radio" name="typeOfContact" value='GUARDIAN' checked> Guardian</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-2">
+                                <div class="radio">
+                                    <label><input type="radio" name="typeOfContact" value='INSIDER'> Insider</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-2">
+                                <div class="radio">
+                                    <label><input type="radio" name="typeOfContact" value='RECIPIENT'> Recipient</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-2">
+                                <div class="radio">
+                                    <label><input type="radio" name="typeOfContact" value='INSIDER_RECIP'> Insider & Recipient</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-2">
+                                <div class="radio">
+                                    <label><input type="radio" name="typeOfContact" value='GUARDIAN_RECIP'> Guardian & Recipient</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
+                            <p style="font-size: larger;"><strong> Type of contact </strong></p>
+                        </div>
+                    </div>
+
+                    <div class="card m-4 p-2" style="position: relative;">
+                        <div class="row mt-3">
+                            <div class="col 12 col-md-6">
+                                <label for="userID">User ID</label>
+                                <input type="text" class="form-control" id="userID" name="userID" readonly value='<?php echo $userID; ?>'>
+                            </div>
+                            <div class="col 12 col-md-6">
+                                <label for="userID">Password</label>
+                                <input type="text" class="form-control" id="password" name="password" readonly value='<?php echo $password; ?>'>
+                            </div>
+                        </div>
+                        <p class="mt-2 invisible" id='checkInsider'><small>Please take note of the user id and password as you will have to communicate it to this contact</small></p>
+                        <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
+                            <p style="font-size: larger;"><strong> Contact Credentials </strong></p>
+                        </div>
+                    </div>
+
+                    <div class="mx-4">
                         <div class="form-group">
-                            <label for="sel1">Country of residence (*)</label>
-                            <select class="form-control" id="country" name='country' required></select>
+                            <label for="message">Message</label>
+                            <textarea class="form-control" rows="5" id="message" name='message'></textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-check mx-4">
-                    <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" name="addressCheck" required> I certify I live in the country mentioned above
-                    </label>
-                </div>
-
-                <div class="card m-4 p-2" style="position: relative;">
-                    <div class="row mt-3">
-                        <div class="col-12 col-lg-2">
-                            <div class="radio">
-                                <label><input type="radio" name="typeOfContact" value='GUARDIAN' checked> Guardian</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-2">
-                            <div class="radio">
-                                <label><input type="radio" name="typeOfContact" value='INSIDER'> Insider</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-2">
-                            <div class="radio">
-                                <label><input type="radio" name="typeOfContact" value='RECIPIENT'> Recipient</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-2">
-                            <div class="radio">
-                                <label><input type="radio" name="typeOfContact" value='INSIDER_RECIP'> Insider & Recipient</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-2">
-                            <div class="radio">
-                                <label><input type="radio" name="typeOfContact" value='GUARDIAN_RECIP'> Guardian & Recipient</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
-                        <p style="font-size: larger;"><strong> Type of contact </strong></p>
-                    </div>
-                </div>
-
-                <div class="card m-4 p-2" style="position: relative;">
-                    <div class="row mt-3">
-                        <div class="col 12 col-md-6">
-                            <label for="userID">User ID</label>
-                            <input type="text" class="form-control" id="userID" name="userID" readonly value='<?php echo $userID; ?>'>
-                        </div>
-                        <div class="col 12 col-md-6">
-                            <label for="userID">Password</label>
-                            <input type="text" class="form-control" id="password" name="password" readonly value='<?php echo $password; ?>'>
-                        </div>
-                    </div>
-                    <p class="mt-2 invisible" id='checkInsider'><small>Please take note of the user id and password as you will have to communicate it to this contact</small></p>
-                    <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
-                        <p style="font-size: larger;"><strong> Contact Credentials </strong></p>
-                    </div>
-                </div>
-
-                <div class="mx-4">
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea class="form-control" rows="5" id="message" name='message'></textarea>
-                    </div>
-                </div>
-            </div>
-
+                
+            </form>
             <div class="row m-1 p-2">
-                <div class="col-md-3"></div>
-                <div class="col-md-3">
-                    <input type="submit" class="form-control bg-success text-white" value="Save" />
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <input type="submit" class="form-control bg-success text-white" value="Save" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="button" class="form-control bg-warning text-white" value="Cancel" />
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <input type="button" class="form-control bg-warning text-white" value="Cancel" />
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 
     <script>

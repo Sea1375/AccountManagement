@@ -19,8 +19,15 @@ if ( have_posts() ) {
     $act_streetLine1 = $results[0]->ACT_ADDRESS_LINE1;
     $act_emailAddress = $results[0]->ACT_EMAIL;
     $act_phone = $results[0]->ACT_PHONE;
-    $act_noticeEmail = $results[0]->ACT_NOTIF_EMAIL == 'Y' ? 'checked' : '';
-    $act_noticeSMS = $results[0]->ACT_NOTIF_SMS == 'Y' ? 'checked' : '';
+
+    if($results[0]->ACT_NOTIF_SMS == 'Y') {
+        $act_noticeSMS = 'checked';
+        $act_noticeEmail = '';
+    } else {
+        $act_noticeEmail = 'checked';
+        $act_noticeSMS = '';
+    }
+
     $act_lastName = $results[0]->ACT_LAST_NAME;
     $act_country = $results[0]->ACT_COUNTRY;
     $act_pulseRadio = $results[0]->ACT_AUTO_PULSE_CHECK == 'Y' ? '' : 'checked';
@@ -46,199 +53,231 @@ if ( have_posts() ) {
 ?>
     <!-- User definition -->
 
-
     <div class="other_elements">
 		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
 		<input type="hidden" value="<?=home_url();?>" id="site_url" />
 	</div>
 
     <div class="container mt-5 p-3">
-        <div class='test'>
-            <h1>This is test.</h1>
-        </div>
-        <h3 class="bg-success text-white p-2 text-center" style="font-family: 'Lobster', cursive;">My Account</h3>
-        <!-- class="needs-validation" novalidate -->
-        <form action="account_form_action.php" method="POST" id="account" class="needs-validation">
-            
-            <input type="hidden" value="<?php echo $account_id; ?>" name="accountId" />
-            <input type='hidden' value='N' name='actAuto' />
-        
-            <div class="row m-1 p-2">
-                <div class="col-12 col-md-6">
-                    <div class="form-group">
-                        <label for="firstName">First Name (*)</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" name="firstName" value='<?php echo $act_firstName; ?>' required>
-                        <div class="valid-feedback">Valid.</div>
-                        <div class="invalid-feedback">Please fill out this field.</div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="form-group">
-                        <label for="lastName">Last Name (*)</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" name="lastName" value='<?php echo $act_lastName; ?>'  required>
-                        <div class="valid-feedback">Valid.</div>
-                        <div class="invalid-feedback">Please fill out this field.</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card m-4 p-2 " style="position: relative;">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="streetLine1">Street Line 1 (*)</label>
-                                <input type="text" class="form-control" id="streetLine1" placeholder="Enter your street line 1" name="streetLine1" value='<?php echo $act_streetLine1; ?>' required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="streetLine2">Street Line 2 (*)</label>
-                                <input type="text" class="form-control" id="streetLine2" placeholder="Enter your street line 2" name="streetLine2" value='<?php echo $act_streetLine2; ?>' required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="city">City (*)</label>
-                                <input type="text" class="form-control" id="city" placeholder="Enter your city" name="city" value='<?php echo $act_city; ?>' required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="stateProvince">State/Province</label>
-                                <input type="text" class="form-control" id="stateProvince" placeholder="Enter your state/province" name="stateProvince" value='<?php echo $act_stateProvince; ?>'>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="postalCode">Postal Code (*)</label>
-                                <input type="text" class="form-control" id="postalCode" placeholder="Enter your postal code" name="postalCode" value='<?php echo $act_postalCode; ?>' required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="sel1">Country (*)</label>
-                                <select class="form-control" id="country" name='country' value='<?php echo $act_country; ?>' required></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-check mb-2 mr-sm-2">
-                        <input type="checkbox" name="addressCheck" required> I certify I live in the country mentioned above
-                        <div class="valid-feedback">Valid.</div>
-                        <div class="invalid-feedback">Check this checkbox to continue.</div>
-                    </div>    
-                </div>
-                <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
-                    <p style="font-size: larger;"><strong>Address where you live </strong>(for sales tax and data privacy purposes)</p>
-                </div>
-            </div>
-            <div class="row mx-1 p-2">
-                <div class="col-12 col-md-6">
-                    <div class="form-group">
-                        <label for="emailAddress">Email Address (*)</label>
-                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter your email address" name="emailAddress" value='<?php echo $act_emailAddress; ?>' required>
-                        <div class="valid-feedback">Valid.</div>
-                        <div class="invalid-feedback">Please fill out this field.</div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="form-group">
-                        <label for="country">Birth Year (*)</label>
-                        <input type="number" class="form-control" id="birthYear" placeholder="Enter your birth year" name="birthYear" value='<?php echo $act_birthYear; ?>' required>
-                        <div class="valid-feedback">Valid.</div>
-                        <div class="invalid-feedback">Please fill out this field.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="mx-4 p-2 form-group">
-                <label for="phone">Your mobile number(*)</label><br>
-                <input type='hidden' name='mobileNumber' />
-                <input id="phone" name="phone" type="tel" class="form-control" value='<?php echo $act_phone; ?>' required>
-                <span id="valid-msg" class="invisible">Valid</span>
-                <span id="error-msg" class="invisible"></span>
-            </div>
-            
-            <div class="m-4 p-2 form-check">
-                <label>Please select your notification preference</label>
-                <div class="row mx-2">
-                    <div class="col-12 col-md-3">
-                        <label class="checkbox-inline form-check-label">
-                            <input type="checkbox" class="form-check-input" name = 'noticeSMS' id = 'noticeSMS' <?php echo $act_noticeSMS; ?> > SMS
-                        </label>
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <label class="checkbox-inline form-check-label">
-                            <input type="checkbox" class="form-check-input" name = 'noticeEmail' id = 'noticeEmail' <?php echo $act_noticeEmail; ?>> Email
-                        </label>
-                    </div>
-                </div>
-                <!--
-                <div class="form-group">
-                    <input type="type" name='forNotice' class='invisible' required>
-                    <div class="valid-feedback">Valid.</div>
-                    <div class="invalid-feedback">Please fill out one field at least.</div>
-                </div>
-                -->
-            </div>
 
-            <div class="m-4 p-2">
-                <label>Please select your pulse check frequency preference:</label>
-                <div class="radio">
-                    <label><input type="radio" name="pulseRadio" value = 'every' <?php echo $act_pulseRadio; ?> ><span> Every </span> 
-                    <input type="number" id="frequency" placeholder="Enter your frequency" name="frequency" value='<?php echo $act_frequency; ?>' min='1' max='8' <?php echo $readonly; ?> > 
-                    <span>  weeks</span></label>
+        <h2 class="p-2 mx-3"><strong>My Account</strong></h2>
+
+        <div class='form-field p-5'>
+            <form action="account_form_action.php" method="POST" id="account" class="needs-validation" novalidate>
+                
+                <input type="hidden" value="<?php echo $account_id; ?>" name="accountId" />
+                <input type='hidden' value='N' name='actAuto' />
+
+                <div class='mx-5 p-2'><h4 class='mx-5'>Update Your Account Details</h4></div>
+                
+                <div class="row m-3 p-2">
+                    <div class="col-12 col-md-6">
+                        <div class="form-group mx-3">
+                            <label for="firstName">First Name (*)</label>
+                            <input type="text" class="form-control input-lg" id="firstName" placeholder="Enter your first name" name="firstName" value='<?php echo $act_firstName; ?>' required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group mx-3">
+                            <label for="lastName">Last Name (*)</label>
+                            <input type="text" class="form-control input-lg" id="lastName" placeholder="Enter your last name" name="lastName" value='<?php echo $act_lastName; ?>'  required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="radio">
-                    <label><input type="radio" name="pulseRadio" value='automatic' <?php echo $act_auto; ?> > Automatic</label>
+                
+                <div class='m-3 p-2'>
+                    <div class="card m-3" style="position: relative;">
+                        <div class="card-body m-3">
+                            <div class="row mt-3">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group mx-3 my-3">
+                                        <label for="streetLine1">Street Line 1 (*)</label>
+                                        <input type="text" class="form-control input-lg" id="streetLine1" placeholder="Enter your street line 1" name="streetLine1" value='<?php echo $act_streetLine1; ?>' required>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group mx-3 my-3">
+                                        <label for="streetLine2">Street Line 2</label>
+                                        <input type="text" class="form-control input-lg" id="streetLine2" placeholder="Enter your street line 2" name="streetLine2" value='<?php echo $act_streetLine2; ?>' >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group mx-3 my-3">
+                                        <label for="city">City (*)</label>
+                                        <input type="text" class="form-control input-lg" id="city" placeholder="Enter your city" name="city" value='<?php echo $act_city; ?>' required>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group mx-3 my-3">
+                                        <label for="stateProvince">State/Province</label>
+                                        <input type="text" class="form-control input-lg" id="stateProvince" placeholder="Enter your state/province" name="stateProvince" value='<?php echo $act_stateProvince; ?>'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group mx-3 my-3">
+                                        <label for="postalCode">Postal Code (*)</label>
+                                        <input type="text" class="form-control input-lg" id="postalCode" placeholder="Enter your postal code" name="postalCode" value='<?php echo $act_postalCode; ?>' required>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group mx-3 my-3">
+                                        <label for="sel1">Country (*)</label>
+                                        <select class="form-control input-lg country" id="country" name='country' required></select>
+                                        <div class="valid-feedback" >Valid.</div>
+                                        <div class="invalid-feedback" >Please select one country at least.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check mx-4 my-3 ">
+                                <input type="checkbox" name="addressCheck" required> I certify I live in the country mentioned above
+                                <div class="valid-feedback">Valid.</div>
+                                <div class="invalid-feedback">Check this checkbox to continue.</div>
+                            </div>    
+                        </div>
+                        <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
+                            <p style="font-size: larger;"><strong>Address where you live </strong>(for sales tax and data privacy purposes)</p>
+                        </div>
+                    </div>
                 </div>
+                
+                <div class="row m-3 p-2">
+                    <div class="col-12 col-md-6">
+                        <div class="form-group mx-3">
+                            <label for="emailAddress">Email Address (*)</label>
+                            <input type="email" class="form-control input-lg" id="emailAddress" placeholder="Enter your email address" name="emailAddress" value='<?php echo $act_emailAddress; ?>' required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group mx-3">
+                            <label for="country">Birth Year (*)</label>
+                            <input type="number" class="form-control input-lg" id="birthYear" placeholder="Enter your birth year" name="birthYear" value='<?php echo $act_birthYear; ?>' required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback birthyear_score">Please fill out this field with correct value.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-3 p-2 row">
+                    <div class=' form-group mx-3 col-12 col-md-6'>
+                        <label for="phone">Your mobile number(*)</label><br>
+                        <input type='hidden' name='mobileNumber' />
+                        
+                        <input id="phone" name="phone" type="tel" class="form-control input-lg" value='<?php echo $act_phone; ?>' required>
+                        <span id="valid-msg" class="invisible">Valid</span>
+                        <span id="error-msg" class="invisible"></span>
+                        
+                    </div>
+                </div>
+                
+                <div class="m-3 p-2 form-check">
+                    <label class='mx-5'>Please select your notification preference</label>
+                    <div class="row m-2">
+                        <div class="col-12 col-md-3 mx-3">
+                            <div class='form-group'>
+                                <input type="checkbox" name = 'noticeEmail' id = 'noticeEmail' <?php echo $act_noticeEmail; ?>  > Email
+                                <div class="valid-feedback" >Valid.</div>
+                                <div class="invalid-feedback" >Please check out one field at least.</div>
+                            </div>  
+                        </div>
+                        <div class="col-12 col-md-3 mx-3">
+                            <label class="checkbox-inline form-check-label">
+                                <input type="checkbox" name = 'noticeSMS' id = 'noticeSMS' <?php echo $act_noticeSMS; ?>> SMS
+                            </label>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="m-3 p-2 my-5">
+                    <label class='mx-5'>Please select your pulse check frequency preference:</label>
+                    <div class='mx-5'>
+                        <div class="radio">
+                            <label>
+                            <input type="radio" name="pulseRadio" value = 'every' <?php echo $act_pulseRadio; ?> style='top: 8px;'> Every 
+                            <input type="number" id="frequency" placeholder="" name="frequency" value='<?php echo $act_frequency; ?>' min='1' max='8' <?php echo $readonly; ?> > weeks
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="pulseRadio" value='automatic' <?php echo $act_auto; ?> > Automatic</label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                <div class="m-5 p-2">
+                    <div class='mx-3 form-group'>
+                        <input type="checkbox" value="" required> I have read and agree with the Need2Tellyou<sup>TM</sup> <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                        <div class="valid-feedback" >Valid.</div>
+                        <div class="invalid-feedback" >Please check out one field at least.</div>
+                    </div>
+                </div>
+            </form>
+            <div class="d-flex justify-content-around m-3">
+                <button type="button" onclick='save()'>Save</button>
+                <button type="button" data-toggle="modal" data-target="#cancelModal" >Cancel</button>
             </div>
-            <div>
-            <div class="m-4 p-2">
-                <input type="checkbox" value="" required> I have read and agree with the Need2Tellyou<sup>TM</sup> <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
-            </div>
-            <div class="row m-1 p-2">
-                <div class="col-md-3"></div>
-                <div class="col-md-3">
-                    <input type="submit" class="form-control bg-success text-white" value="Save" />
-                </div>
-                <div class="col-md-3">
-                    <input type="button" class="bg-warning text-white" data-toggle="modal" data-target="#myModal" value='Cancel' />
-                </div>
-            </div>
-        </form>
-        <div class="modal fade" id="myModal">
+        </div>
+
+        <div class="modal fade" id="saveModal">
             <div class="modal-dialog">
-            <div class="modal-content">
-            
-                <!-- Modal Header -->
-                <div class="modal-header">
-                <h4 class="modal-title">Do you want to cancel?</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+                <div class="modal-content">
                 
-                <!-- Modal body -->
-                <div class="modal-body">
-                    Go to Home page...
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Success</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Your account information has been updated correctly.
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class='modal_button'>OK</button>
+                    </div>
+                    
                 </div>
-                
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <a href='#'><button type="button" class="btn btn-danger" data-dismiss="modal">Go to Home</button></a>
-                </div>
-                
             </div>
+        </div>
+
+        <div class="modal fade" id="cancelModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Please confirm you want to leave this page</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Confirming will bring you to the home page
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <a href='#'><button type="button" class='modal_button'>Confirm</button></a>
+                        <button type="button" data-dismiss="modal" class='modal_button'>Go back</button>
+                    </div>
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -288,6 +327,7 @@ if ( have_posts() ) {
     </script>
 
     <script>
+        var stop;
         getCountryName();
         function getCountryName() {
             var request_url = $('#theme_url').val() + '/page-templates/account_management/get_countryName.php';
@@ -301,86 +341,89 @@ if ( have_posts() ) {
             xmlhttp.send();
         }
 
-        $(document).ready(function () {
-            $('#account').on('submit', function(e) {
+        function save() {
+            var index = $("input[name=pulseRadio]")[0].checked ? 0 : 1;
+            if(index == 1) $("input[name=actAuto]").val('Y');
+            
+            get_max_birthyear();
+            
+            stop = 'N';
+            validate();
+            if(stop == 'Y') return;
 
-                var index = $("input[name=pulseRadio]")[0].checked ? 0 : 1;
-                if(index == 1) $("input[name=actAuto]").val('Y');
+            const currentUrl = $('#theme_url').val() + '/page-templates/account_management/account/account_form_action.php';
 
-                e.preventDefault();
-                const currentUrl = $('#theme_url').val() + '/page-templates/account_management/account/' + $(this).attr('action');
-                
-                $.ajax({
-                    url : currentUrl || window.location.pathname,
-                    type: "POST",
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        console.log(data, '------------');
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        
-        (function() {
-            'use strict';
-            console.log($('#country').val());
             $.ajax({
+                url : currentUrl || window.location.pathname,
                 type: "POST",
-                url: $('#theme_url').val() + '/page-templates/account_management/account/account_birthday.php',
-                data: { country: $('input[name=country]').val()},
-                success:function(data){
-                    console.log(data);
-                    $("input[name=birthYear]").attr({
-                        "max" : data,        
-                        "min" : 1880          
-                    });
+                data: {
+                    accountId: $('input[name=accountId]').val(),
+                    addressCheck: $('input[name=addressCheck]').val(),
+                    noticeSMS: $('input[name=noticeSMS]').val(),
+                    noticeEmail: $('input[name=noticeEmail]').val(),
+                    actAuto: $('input[name=actAuto]').val(),
+                    frequency: $('input[name=frequency]').val(),
+                    firstName: $('input[name=firstName]').val(),
+                    lastName: $('input[name=lastName]').val(),
+                    streetLine1: $('input[name=streetLine1]').val(),
+                    streetLine2: $('input[name=streetLine2]').val(),
+                    city: $('input[name=city]').val(),
+                    stateProvince: $('input[name=stateProvince]').val(),
+                    postalCode: $('input[name=postalCode]').val(),
+                    country: $("select.country").children("option:selected").val(),
+                    emailAddress: $('input[name=emailAddress]').val(),
+                    birthYear: $('input[name=birthYear]').val(),
+                    mobileNumber: $('input[name=mobileNumber]').val()
+                },
+                success: function (data) {
+                    $('#saveModal').modal('show');
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     alert(errorThrown);
                 }
             });
-/*            
-            var checkCount = 0;
-
-            $('input[name=noticeSMS]').change(function(){
-                if($(this).is(':checked')) {
-                    checkCount ++;
-                } else {
-                    checkCount --;
-                }
-                if(checkCount > 0) $('input[name=forNotice]').val('FILL');
-                else $('input[name=forNotice]').val('');
-            });
-            $('input[name=noticeEmail]').change(function(){
-                if($(this).is(':checked')) {
-                    checkCount ++;
-                } else {
-                    checkCount --;
-                }
-                if(checkCount > 0) $('input[name=forNotice]').val('FILL');
-                else $('input[name=forNotice]').val('');
-            });
-*/
-            window.addEventListener('load', function() {
-                // Get the forms we want to add validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
+        }
+        function validate() {
+            var forms = document.getElementsByClassName('needs-validation');
                 // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-                });
-            }, false);
-        })();
+            var validation = Array.prototype.filter.call(forms, function(form) {
+            
+                if (form.checkValidity() === false) {
+                    stop = 'Y';            
+                }
+                form.classList.add('was-validated');
+            
+            });
+        }
+        $('input[name=noticeSMS]').change(function(){
+            if(!$(this).is(':checked')) {
+                document.getElementById("noticeEmail").required = true;
+            } else {
+                document.getElementById("noticeEmail").required = false;
+            }
+        });
+    
+        
+        function get_max_birthyear() {   
+            console.log('country', $("select.country").children("option:selected").val());
+            $.ajax({
+                type: "POST",
+                url: $('#theme_url').val() + '/page-templates/account_management/account/account_birthday.php',
+                data: { country: $("select.country").children("option:selected").val()},
+                success:function(data){
+                    console.log('max', data);
+                    $("input[name=birthYear]").attr({
+                        "max" : data,
+                        "min" : 1880          
+                    });
+                    $('.birthyear_score').html('This field must be between 1880 and ' + data + '.');
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        }
+
     </script>
 
 
