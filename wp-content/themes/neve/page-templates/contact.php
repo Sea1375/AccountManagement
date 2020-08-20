@@ -12,6 +12,8 @@ if ( have_posts() ) {
     
     $sql = "SELECT MAX(CTC_ID) FROM contact";
     $userID = $wpdb->get_var($sql) + 1;
+    $userID = 'u' . str_pad($userID, 7 , '0' , STR_PAD_LEFT);
+
     $password = wp_generate_password ( $length = 12, $special_chars = true, $extra_special_chars = false );
     
 ?>    
@@ -33,10 +35,10 @@ if ( have_posts() ) {
 
         <div class="d-flex justify-content-around m-3">
             <button type="button" onclick='add_fill()'>Add</button>
-            <button type="button" onclick='delete_row()'>Delete</button>
+            <button type="button"  data-toggle="modal" data-target="#deleteModal">Delete</button>
         </div>
 
-        <div class='form-field p-5'>
+        <div class='form-field p-5 mt-5 invisible'>
             <form action="contact_form_action.php" method="POST" id="contact" name='contact' class="needs-validation" novalidate>
                 <input type = 'hidden' name='accountId' value=<?php echo $ctc_account_id; ?> id='accountId' />
                 <input type='hidden' id='ctc_id' name='ctc_id' />
@@ -69,33 +71,36 @@ if ( have_posts() ) {
                         </div>
                     </div>
                 </div>
-                    
-
-                    <div class="mx-4 form-group">
+                <div class="m-3 p-2 row">
+                    <div class=' form-group mx-3 col-12 col-md-6'>
                         <label for="phone">Your mobile number(*)</label><br>
                         <input type='hidden' name='mobileNumber' />
-                        <input id="phone" name="phone" type="tel" class="form-control" required />
-                        <span id="valid-msg" class="invisible">✓ Valid</span>
+                        
+                        <input id="phone" name="phone" type="tel" class="form-control input-lg" required>
+                        <span id="valid-msg" class="invisible"> Valid</span>
                         <span id="error-msg" class="invisible"></span>
+                        
                     </div>
+                </div>
 
-                    <div class="row mx-2">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="sel1">Country of residence (*)</label>
-                                <select class="form-control" id="country" name='country' required></select>
-                            </div>
-                        </div>
+                <div class="m-3 p-2 row">
+                    <div class=' form-group mx-3 col-12 col-md-6'>
+                        <label for="country">Country of residence (*)</label>
+                        <select class="form-control input-lg country" id="country" name='country' style='font-size: 14px;' required></select>
+                        <div class="valid-feedback" >Valid.</div>
+                        <div class="invalid-feedback" >Please select one country at least.</div>
                     </div>
+                </div>
 
-                    <div class="form-check mx-4">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="addressCheck" required> I certify I live in the country mentioned above
-                        </label>
-                    </div>
-
+                <div class="form-check mx-5 my-3 ">
+                    <input type="checkbox" name="addressCheck" required> I certify I live in the country mentioned above
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Check this checkbox to continue.</div>
+                </div>    
+                 
+                <div class="m-3 p-2 mt-5">
                     <div class="card m-4 p-2" style="position: relative;">
-                        <div class="row mt-3">
+                        <div class="row mt-3 mx-2">
                             <div class="col-12 col-lg-2">
                                 <div class="radio">
                                     <label><input type="radio" name="typeOfContact" value='GUARDIAN' checked> Guardian</label>
@@ -111,12 +116,12 @@ if ( have_posts() ) {
                                     <label><input type="radio" name="typeOfContact" value='RECIPIENT'> Recipient</label>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-2">
+                            <div class="col-12 col-lg-3">
                                 <div class="radio">
                                     <label><input type="radio" name="typeOfContact" value='INSIDER_RECIP'> Insider & Recipient</label>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-2">
+                            <div class="col-12 col-lg-3">
                                 <div class="radio">
                                     <label><input type="radio" name="typeOfContact" value='GUARDIAN_RECIP'> Guardian & Recipient</label>
                                 </div>
@@ -126,11 +131,12 @@ if ( have_posts() ) {
                             <p style="font-size: larger;"><strong> Type of contact </strong></p>
                         </div>
                     </div>
-
+                </div>
+                <div class="m-3 p-2 mt-5">
                     <div class="card m-4 p-2" style="position: relative;">
-                        <div class="row mt-3">
+                        <div class="row mt-3 mx-2">
                             <div class="col 12 col-md-6">
-                                <label for="userID">User ID</label>
+                                <label for="userID">User</label>
                                 <input type="text" class="form-control" id="userID" name="userID" readonly value='<?php echo $userID; ?>'>
                             </div>
                             <div class="col 12 col-md-6">
@@ -150,19 +156,87 @@ if ( have_posts() ) {
                             <textarea class="form-control" rows="5" id="message" name='message'></textarea>
                         </div>
                     </div>
-                </div>
-
                 
-            </form>
-            <div class="row m-1 p-2">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3">
-                        <input type="submit" class="form-control bg-success text-white" value="Save" />
-                    </div>
-                    <div class="col-md-3">
-                        <input type="button" class="form-control bg-warning text-white" value="Cancel" />
-                    </div>
                 </div>
+            </form>
+
+            <div class="d-flex justify-content-around m-3">
+                <button type="button" onclick='save()'>Save</button>
+                <button type="button" data-toggle="modal" data-target="#cancelModal" >Cancel</button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="saveModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Success</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body save-modal-body">
+                        Your contact information has been inserted/updated correctly.
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class='modal_button'>OK</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="cancelModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Please confirm you want to leave this page</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Confirming will bring you to the home page
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <a href='#'><button type="button" class='modal_button'>Confirm</button></a>
+                        <button type="button" data-dismiss="modal" class='modal_button'>Go back</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Please confirm you want to delete this contact.</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Do you confirm deleting?
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class='modal_button' onclick='delete_row()' data-dismiss="modal">Confirm</button>
+                        <button type="button" data-dismiss="modal" class='modal_button'>Go back</button>
+                    </div>
+                    
+                </div>
+            </div>
         </div>
     </div>
 
@@ -211,10 +285,11 @@ if ( have_posts() ) {
     </script>
 
     <script>
-        var ctc_ids;
+        var ctc_ids, stop;
+
         getCountryName();
         refresh_table(); 
-               
+
         function getCountryName() {
             var request_url = $('#theme_url').val() + '/page-templates/account_management/get_countryName.php';
             var xmlhttp = new XMLHttpRequest();
@@ -238,51 +313,58 @@ if ( have_posts() ) {
             });
         }
 
-        $(document).ready(function () {
-            $('#contact').on('submit', function(e) {
-                
-                e.preventDefault();
-                var currentUrl = $('#theme_url').val() + '/page-templates/account_management/contact/' + $(this).attr('action');
+       function save() {
+            
+            stop = 'N';
+            validate();
+            if(stop == 'Y') return;
 
-                $.ajax({
-                    url : currentUrl || window.location.pathname,
-                    type: "POST",
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        refresh_table();
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                    }
-                });
+            var currentUrl = $('#theme_url').val() + '/page-templates/account_management/contact/contact_form_action.php';
+            $.ajax({
+                url : currentUrl || window.location.pathname,
+                type: "POST",
+                data: {
+                    firstName: $('input[name=firstName]').val(),
+                    lastName: $('input[name=lastName]').val(),
+                    emailAddress: $('input[name=emailAddress]').val(),
+                    mobileNumber: $('input[name=mobileNumber]').val(),
+                    country: $("select.country").children("option:selected").val(),
+                    typeOfContact: $('input[name=typeOfContact]').val(),
+                    password: $('input[name=password]').val(),
+                    message: $.trim($("#message").val()),
+                    accountId: $('input[name=accountId]').val()
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('.save-modal-body').html('Your contact information has been ' + data + ' correctly.');
+                    $('#saveModal').modal('show');
+                    refresh_table();
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
             });
-        });
+        }
 
-        (function() {
-            'use strict';           
-
-            window.addEventListener('load', function() {
-                // Get the forms we want to add validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-                });
-            }, false);
-        })();
+        function validate() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+            
+                if (form.checkValidity() === false) {
+                    stop = 'Y';      
+                }
+                form.classList.add('was-validated');
+            
+            });
+        }
 
 
         function row_click(row) {
-            $('table > tr').css('background-color', '#ffffff');
-            $(row).css('background-color', '#f2f2f2');
+            $('table > tr').css('background-color', '#f0f0f0');
+            $(row).css('background-color', 'lightgrey');
             var string_ctcids = ctc_ids.split(" ");
             $('input[name=ctc_id]').val(string_ctcids[row.rowIndex]);
+            $('.form-field').removeClass('invisible');
         }
         
         function delete_row() {
@@ -299,6 +381,7 @@ if ( have_posts() ) {
             });
         }
         function add_fill() {
+            $('.form-field').removeClass('invisible');
             if($('input[name=ctc_id]').val() == '') return;
             $.ajax({
                 type: "POST",
@@ -314,8 +397,8 @@ if ( have_posts() ) {
                     $('input[name=userID').val($('input[name=ctc_id]').val());
                     $('input[name=country').val(dat.CTC_COUNTRY);
                     $('input[name=password').val(dat.CTC_PASSWORD);
-                    $('input[name=message').val(dat.CTC_MESSAGE);
-                    
+                    $("textarea#message").val(dat.CTC_MESSAGE);
+
                     const radios = document.forms.contact.elements.typeOfContact;
                     for(var i = 0; i < radios.length; i ++) {
                         if(radios[i].value == dat.CTC_TYPE) {

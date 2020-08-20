@@ -13,6 +13,7 @@ if ( have_posts() ) {
         <input type='hidden' value='<?php echo $account_id;  ?>' name='accountId' id='accountId' />
     </div>
     <div class="container mt-5 p-3">
+        <h2 class="p-2 mx-3"><strong>My Schedule</strong></h2>
         <div class='m-2'>
             <div class="m-4" style="max-height: 200px; overflow: auto;">
                 <div class="table-responsive-sm">
@@ -20,10 +21,10 @@ if ( have_posts() ) {
                     </table>
                 </div>
             </div>
-            <div class="d-flex justify-content-around mb-3">
-                <button type="button" class="btn btn-info" onclick='filename_recipient()'>Add</button>
-                <button type="button" class="btn btn-info" onclick='delete_modal_check()'>Delete</button>
-                <button type="button" class="btn btn-info" onclick='update_modal_check()'>Update</button>
+            <div class="d-flex justify-content-around my-3">
+                <button type="button" onclick='filename_recipient()'>Add</button>
+                <button type="button" onclick='delete_modal_check()'>Delete</button>
+                <button type="button" onclick='update_modal_check()'>Update</button>
             </div>
         </div>
         

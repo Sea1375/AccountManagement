@@ -16,9 +16,9 @@ if ( have_posts() ) {
         </div>
         <div class='m-2 p-3'>
         <div class="d-flex justify-content-around mb-3">
-            <a id='close'><button class='btn btn-info' onclick='close_window()'>Close</button></a>
-            <a id='contact'><button class='btn btn-info'>Check contacts Info</button></a>
-            <a href='' id='home'><button class='btn btn-info'>Home page</button></a>
+            <a id='close'><button type='button' onclick='close_window()'>Close</button></a>
+            <a id='contact'><button type='button' style='font-size: 16px;'>Check contacts Info</button></a>
+            <a href='' id='home'><button type='button'>Home page</button></a>
         </div>
     </div>
     

@@ -63,37 +63,58 @@ if ( have_posts() ) {
                     </div>
                     <input type='hidden' value='NOCONFIRM' name='actAuto' />
                 </div>
-                <div class='row'>
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3">
-                        <input type="submit" class="form-control bg-success text-white" value="Save" />
-                    </div>
-                    <div class="col-md-3">
-                        <input type="button" class="bg-warning text-white" data-toggle="modal" data-target="#myModal" value='Close' />
-                    </div>`
+                <div class="d-flex justify-content-around m-3">
+                    <button type="button" onclick='save()'>Save</button>
+                    <button type="button" data-toggle="modal" data-target="#cancelModal" >Close</button>
                 </div>
             </div>
         </form>
-        <div class="modal fade" id="myModal">
+        <div class="modal fade" id="saveModal">
             <div class="modal-dialog">
-            <div class="modal-content">
-            
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Do you want to cancel?</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+                <div class="modal-content">
                 
-                <!-- Modal body -->
-                <div class="modal-body">
-                    Go to Home page...
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Success</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Your account information has been updated correctly.
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class='modal_button'>OK</button>
+                    </div>
+                    
                 </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="cancelModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
                 
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <a href='#'><button type="button" class="btn btn-danger" data-dismiss="modal">Go to Home</button></a>
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Please confirm you want to leave this page</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Confirming will bring you to the home page
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <a href='#'><button type="button" class='modal_button'>Confirm</button></a>
+                        <button type="button" data-dismiss="modal" class='modal_button'>Go back</button>
+                    </div>
+                    
                 </div>
-                
             </div>
         </div>
     </div>
@@ -101,30 +122,31 @@ if ( have_posts() ) {
         var route = '<?=home_url();?>' + '/sample-page/';
         $("#home").attr("href", route);
         
-        $(document).ready(function () {
-            $('#confirm').on('submit', function(e) {
+        function save() {
 
-                var index = $("input[name=confirmRadio]")[0].checked ? 0 : 1;
-                if(index == 0) $("input[name=actAuto]").val('NOCONFIRM');
-                else $("input[name=actAuto]").val('CONFIRM');
-                console.log($("input[name=actAuto]").val());
+            var index = $("input[name=confirmRadio]")[0].checked ? 0 : 1;
+            if(index == 0) $("input[name=actAuto]").val('NOCONFIRM');
+            else $("input[name=actAuto]").val('CONFIRM');
 
-                e.preventDefault();
-                var currentUrl = $('#theme_url').val() + '/page-templates/account_management/confirm/' + $(this).attr('action');
-                console.log(currentUrl);
-                $.ajax({
-                    url : currentUrl || window.location.pathname,
-                    type: "POST",
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        console.log(data, '------------');
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                    }
-                });
+            var currentUrl = $('#theme_url').val() + '/page-templates/account_management/confirm/confirm_form_action.php';
+            console.log(currentUrl);
+            $.ajax({
+                url : currentUrl || window.location.pathname,
+                type: "POST",
+                data: {
+                    accountId: $('input[name=accountId]').val(),
+                    contactId: $('input[name=contactId]').val(),
+                    actAuto: $('input[name=actAuto]').val(),
+                    date: $('input[name=date]').val()
+                },
+                success: function (data) {
+                    $('#saveModal').modal('show');
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
             });
-        });
+        }
     </script>
 <?php
 }

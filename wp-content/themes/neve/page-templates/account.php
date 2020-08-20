@@ -135,8 +135,8 @@ if ( have_posts() ) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group mx-3 my-3">
-                                        <label for="sel1">Country (*)</label>
-                                        <select class="form-control input-lg country" id="country" name='country' required></select>
+                                        <label for="country">Country (*)</label>
+                                        <select class="form-control input-lg country" id="country" name='country' style='font-size: 14px;' required></select>
                                         <div class="valid-feedback" >Valid.</div>
                                         <div class="invalid-feedback" >Please select one country at least.</div>
                                     </div>
@@ -158,7 +158,7 @@ if ( have_posts() ) {
                     <div class="col-12 col-md-6">
                         <div class="form-group mx-3">
                             <label for="emailAddress">Email Address (*)</label>
-                            <input type="email" class="form-control input-lg" id="emailAddress" placeholder="Enter your email address" name="emailAddress" value='<?php echo $act_emailAddress; ?>' required>
+                            <input type="email" class="form-control input-lg" id="emailAddress" placeholder="Enter your email address" name="emailAddress" value='<?php echo $act_emailAddress; ?>' required readonly>
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
@@ -178,7 +178,7 @@ if ( have_posts() ) {
                         <input type='hidden' name='mobileNumber' />
                         
                         <input id="phone" name="phone" type="tel" class="form-control input-lg" value='<?php echo $act_phone; ?>' required>
-                        <span id="valid-msg" class="invisible">Valid</span>
+                        <span id="valid-msg" class="invisible"> Valid</span>
                         <span id="error-msg" class="invisible"></span>
                         
                     </div>
@@ -385,7 +385,6 @@ if ( have_posts() ) {
         }
         function validate() {
             var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
             var validation = Array.prototype.filter.call(forms, function(form) {
             
                 if (form.checkValidity() === false) {

@@ -16,33 +16,33 @@ if ( have_posts() ) {
     </div>
 
     <div class="container mt-1 p-3">
-        <div class='row'>
-            <div class='col-12 col-md-8 mt-5'>
-                <h3 class="bg-success text-white p-2 text-center" style="font-family: 'Lobster', cursive;">My Files</h3>
-            </div>
-            <div class='col-12 col-md-4'>
-                <div class="card m-4 p-2 " style="position: relative;">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">Capacity: </div>
-                            <div class="col-md-6" id='capacity'></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">Available: </div>
-                            <div class="col-md-6" id='available'></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">Used: </div>
-                            <div class="col-md-6" id='used'></div>
-                        </div>
-                    </div>
-                    <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
-                        <p style="font-size: larger;"><strong>Storage</strong></p>
+        
+
+        <div class='mx-5'>
+            <div class='row'>
+                <div class='col-12 col-md-8 mt-5'>
+                    <h2 class="p-2 mx-3"><strong>My Files</strong></h2>
+                </div>
+                <div class='col-12 col-md-4 mt-5'>
+                    <div class="table-responsive-sm" style='border: 1px solid;'>
+                        <table class="storage" style="margin-bottom: 0; margin-top: 0; position: relative;">
+                            <tr>
+                                <td>Capacity: </td><td><div id='capacity'></div></td>
+                            </tr>
+                            <tr>
+                                <td>Available: </td><td><div id='available'></div></td>
+                            </tr>
+                            <tr>
+                                <td>Used: </td><td><div id='used'></div></td>
+                            </tr>
+                            <div style="position: absolute; left: 30px; top: -15px; background-color: #f0f0f0;" class="px-2">
+                                <p style="font-size: larger;"><strong>Storage</strong></p>
+                            </div>
+                        </table>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class='m-5'>
+
             <div class="m-4" style="max-height: 200px; overflow: auto;" class='border'>
                 <div class="table-responsive-sm">
                     <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='filesTable'>
@@ -51,9 +51,9 @@ if ( have_posts() ) {
             </div>
                 
             <div class="d-flex justify-content-around mb-3">
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addModal">Add</button>
-                <button type="button" class="btn btn-info" onclick='file_delete()'>Delete</button>
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#downloadModal">Download</button>
+                <button type="button" data-toggle="modal" data-target="#addModal">Add</button>
+                <button type="button" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                <button type="button" data-toggle="modal" data-target="#downloadModal">Download</button>
             </div>
         </div>
 
@@ -75,8 +75,8 @@ if ( have_posts() ) {
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <input type='submit' class='bg-info' value='Upload' />
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class='modal_button' onclick='upload_file()' data-dismiss="modal">Upload</button>
+                            <button type="button" data-dismiss="modal" class='modal_button'>Close</button>
                         </div>
                     </div>
                 </div>
@@ -103,15 +103,38 @@ if ( have_posts() ) {
                             <div class='my-2 p-2 bg-warning invisible text-center' id='down'></div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-info" onclick='file_download()'>Download</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class='modal_button' onclick='download_file()' data-dismiss="modal">Upload</button>
+                            <button type="button" data-dismiss="modal" class='modal_button'>Close</button>
                         </div>
                     </div>
                 </div>
                 
             </form>
         </div>
-
+        <div class="modal fade" id="deleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Please confirm you want to delete this contact.</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Do you confirm deleting?
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class='modal_button' onclick='delete_file()' data-dismiss="modal">Confirm</button>
+                        <button type="button" data-dismiss="modal" class='modal_button'>Go back</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -128,45 +151,42 @@ if ( have_posts() ) {
             selectedFile = $(this).prop('files')[0];
         });
         
-        $(document).ready(function () {
-            $('#file_upload').on('submit', function(e) {
-                e.preventDefault();
+        function upload_file() {
                 
-                var currentUrl = $('#theme_url').val() + '/page-templates/account_management/files/' + $(this).attr('action');
-                var formData = new FormData();
-                
-                formData.append("file", selectedFile);
-                formData.append('available', $('#available').html());
-                formData.append('accountId', parseInt('<?php echo $account_id; ?>'));
+            var currentUrl = $('#theme_url').val() + '/page-templates/account_management/files/file_upload.php';
+            var formData = new FormData();
+            
+            formData.append("file", selectedFile);
+            formData.append('available', $('#available').html());
+            formData.append('accountId', parseInt('<?php echo $account_id; ?>'));
 
-                $.ajax({
-                    url : currentUrl || window.location.pathname,
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    cached: false,
-                    success: function (data) {
-                        console.log('success  ', data);
-                        $('#alert').removeClass('invisible');
-                        if(data == "File is too large.") {
-                            console.log('enter');
-                            $('#alert').html('<h6>File is too large.</h6>');
-                        } else {
-                            $('#alert').html('<h6>Upload is succeeded.</h6>');
-                            refresh_table();
-                            $('#del_and_down').removeClass('invisible');
-                            $('#del_and_down').html('<h6>The Upload is succeeded.</h6>');
-                        }
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        $('#alert').removeClass('invisible');
-                        $('#alert').html('<h6>Upload is failed.</h6>');
-                        alert(errorThrown);
+            $.ajax({
+                url : currentUrl || window.location.pathname,
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                cached: false,
+                success: function (data) {
+                    console.log('success  ', data);
+                    $('#alert').removeClass('invisible');
+                    if(data == "File is too large.") {
+                        console.log('enter');
+                        $('#alert').html('<h6>File is too large.</h6>');
+                    } else {
+                        $('#alert').html('<h6>Upload is succeeded.</h6>');
+                        refresh_table();
+                        $('#del_and_down').removeClass('invisible');
+                        $('#del_and_down').html('<h6>The Upload is succeeded.</h6>');
                     }
-                });
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    $('#alert').removeClass('invisible');
+                    $('#alert').html('<h6>Upload is failed.</h6>');
+                    alert(errorThrown);
+                }
             });
-        });
+        }
 
         function row_click(row) {
             $('table > tr').css('background-color', '#ffffff');
@@ -195,7 +215,7 @@ if ( have_posts() ) {
         }
 
 
-        function file_delete() {
+        function delete_file() {
             if($('input[name=fil_id]').val() == '') {
                 alert('Please select a file to delete.');
             }
@@ -222,28 +242,28 @@ if ( have_posts() ) {
 
         function file_download() {
             if($('input[name=fil_id]').val() == '') {
-                    $('#down').removeClass('invisible');
-                    $('#down').html('<h6>Please a file to download.</h6>');
-                    return;
+                $('#down').removeClass('invisible');
+                $('#down').html('<h6>Please a file to download.</h6>');
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: $('#theme_url').val() + '/page-templates/account_management/files/file_download.php',
+                data: { 
+                    userId: $('input[name=accountId]').val(),
+                    filId: $('input[name=fil_id]').val()
+                }, 
+                success:function(data){
+                    console.log(data);
+                    $('#del_and_down').removeClass('invisible');
+                    $('#del_and_down').html('<h6>The Download is succeeded.</h6>');
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                    $('#del_and_down').removeClass('invisible');
+                    $('#del_and_down').html('<h6>The Download is failed.</h6>');
                 }
-                $.ajax({
-                    type: "POST",
-                    url: $('#theme_url').val() + '/page-templates/account_management/files/file_download.php',
-                    data: { 
-                        userId: $('input[name=accountId]').val(),
-                        filId: $('input[name=fil_id]').val()
-                    }, 
-                    success:function(data){
-                        console.log(data);
-                        $('#del_and_down').removeClass('invisible');
-                        $('#del_and_down').html('<h6>The Download is succeeded.</h6>');
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                        $('#del_and_down').removeClass('invisible');
-                        $('#del_and_down').html('<h6>The Download is failed.</h6>');
-                    }
-                });
+            });
         }
     </script>
 

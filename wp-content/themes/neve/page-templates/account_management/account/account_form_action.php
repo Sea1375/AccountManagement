@@ -23,7 +23,7 @@
         $act_state_province = $_POST['stateProvince'];
         $act_postal_code = $_POST['postalCode'];
         $act_country = $_POST['country'];
-        $act_email = $_POST['emailAddress'];
+        //$act_email = $_POST['emailAddress'];
         $act_birth_year = $_POST['birthYear'];
         $act_phone = $_POST['mobileNumber'];
         $current_time = date("Y-m-d h:m:s");
@@ -36,7 +36,6 @@
             ACT_STATE_PROVINCE = '" . $act_state_province . "', 
             ACT_POSTAL_CODE = '" . $act_postal_code . "', 
             ACT_COUNTRY = '" . $act_country . "', 
-            ACT_EMAIL = '" . $act_email . "', 
             ACT_BIRTH_YEAR = '" . $act_birth_year . "', 
             ACT_PHONE = '" . $act_phone . "', 
             ACT_NOTIF_SMS = '" . $act_notif_sms . "', 

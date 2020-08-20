@@ -6,9 +6,7 @@
     $sql = "SELECT SCH_ID, SCH_FILE_ID, SCH_CONTACT_ID, SCH_TYPE, SCH_SCHEDULE_DATE, SCH_NB_DAYS, SCH_MESSAGE FROM schedule WHERE SCH_ACCOUNT_ID = '" . $account_id . "'";
     $results = $wpdb->get_results($sql);
 
-    if( count($results) ) {
-        $table_html = "<tr><th>File Name</th><th>Recipient Name</th><th>Schedule</th></tr>";
-    }
+    $table_html = "<tr><th>File Name</th><th>Recipient Name</th><th>Schedule</th></tr>";
 
     $sch_ids = array();
     foreach($results as $result) {
