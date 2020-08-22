@@ -8,14 +8,28 @@ if ( have_posts() ) {
 
     <!-- User definition -->
 <?php
-    $ctc_account_id = wp_get_current_user()->ID;;
+    $ctc_account_id = wp_get_current_user()->ID;
     
     $sql = "SELECT MAX(CTC_ID) FROM CONTACT";
     $userID = $wpdb->get_var($sql) + 1;
     $userID = 'u' . str_pad($userID, 7 , '0' , STR_PAD_LEFT);
-
     $password = wp_generate_password ( $length = 12, $special_chars = true, $extra_special_chars = false );
-    
+
+    $sql = "SELECT COUNT(CTC_TYPE) FROM CONTACT WHERE CTC_TYPE = 'GUARDIAN'";
+    $result = $wpdb->get_var($sql);
+    $guardian_popup = $result < 4 ? 'we need at least 3 to make the service work.' : '' ;
+
+    $sql = "SELECT COUNT(CTC_TYPE) FROM CONTACT WHERE CTC_TYPE = 'RECIPIENT'";
+    $rep_count = $wpdb->get_var($sql);
+    $recipient_popup = $rep_count == 0 ? 'At present, there are not recipient.' : '' ;
+
+    $sql = "SELECT PLN_NB_RECIP FROM PLAN, ACCOUNT WHERE ACT_ID = '" . $ctc_account_id . "' AND ACT_PLAN = 'PLN_CODE'";
+    $result = $wpdb->get_var($sql);
+    $recipient_max_popup =  $result > $rep_count? 'The count of recipient is exceeded.' : '';
+
+    $sql = "SELECT ACT_PLAN FROM ACCOUNT WHERE ACT_ID = '" . $ctc_account_id . "'";
+    $plan = $wpdb->get_var($sql);
+
 ?>    
     <div class="other_elements">
 		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
@@ -131,6 +145,7 @@ if ( have_posts() ) {
                         <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
                             <p style="font-size: larger;"><strong> Type of contact </strong></p>
                         </div>
+                        <div class='my-2 p-2 bg-warning invisible text-center' id='type_alert'></div>
                     </div>
                 </div>
                 <div class="m-3 p-2 mt-5">
@@ -320,6 +335,12 @@ if ( have_posts() ) {
             validate();
             if(stop == 'Y') return;
 
+            const plan = '<?php echo $plan; ?>';
+            if($('input[name=typeOfContact]').val() == 'INSIDER' && plan == 'FREE'){
+                $('#type_alert').removeClass('invisible');
+                $('#type_alert').html('<h6>You can not add a insider</h6>');
+                return;
+            }
             var currentUrl = $('#theme_url').val() + '/page-templates/account_management/contact/contact_form_action.php';
             $.ajax({
                 url : currentUrl || window.location.pathname,

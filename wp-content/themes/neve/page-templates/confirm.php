@@ -32,7 +32,7 @@ if ( have_posts() ) {
                 <div class='text mt-3 px-2'>
                     <?php echo $act_first_name . ' ' . $act_last_name; ?> has subscribed to our service named Need2TellYou.<br>
                     You can find explanation of what this service does by clicking <a href="#" id='home'>here</a><br>
-                    In order to initiate the document release process, and as per <?php echo $act_first_name; ?> `s wish, we need to make sure <?php echo $act_first_name; ?> Is dead.
+                    In order to initiate the document release process, and as per <?php echo $act_first_name; ?> ``s wish, we need to make sure <?php echo $act_first_name; ?> Is dead.
                 </div>
             </div>
                     

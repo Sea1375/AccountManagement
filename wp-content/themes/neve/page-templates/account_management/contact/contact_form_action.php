@@ -12,7 +12,7 @@
     $ctc_password = $_POST['password'];
     $ctc_message = $_POST['message'];
     $ctc_account_id = $_POST['accountId'];
-    $ctc_wp_user_id = get_current_user_id();
+    $ctc_wp_user_id = $ctc_type == 'INSIDER' ? get_current_user_id() : '';
     
     $sql = "SELECT CTC_ID FROM CONTACT WHERE CTC_ACCOUNT_ID = '" . $ctc_account_id . "'AND CTC_EMAIL = '" . $ctc_email. "'";
     $result = $wpdb->get_var($sql);
@@ -27,7 +27,8 @@
             CTC_PASSWORD = '" . $ctc_password . "', 
             CTC_MESSAGE = '" . $ctc_message . "', 
             CTC_ACCOUNT_ID = '" . $ctc_account_id . "', 
-            CTC_WP_USER_ALIAS = '" . $ctc_userid . "', 
+            CTC_WP_USER_ALIAS = '" . $ctc_userid . "',
+            CTC_WP_USER_ID = '" . $ctc_wp_user_id . "',
             CTC_LAST_UPDATE = '" . $current_time . "' WHERE CTC_ID = '" . $result . "'";
         $wpdb->query($sql);
         echo "updated"; 
