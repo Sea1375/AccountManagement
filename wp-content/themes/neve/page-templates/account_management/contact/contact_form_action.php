@@ -16,7 +16,8 @@
     
     $sql = "SELECT CTC_ID FROM CONTACT WHERE CTC_ACCOUNT_ID = '" . $ctc_account_id . "'AND CTC_EMAIL = '" . $ctc_email. "'";
     $result = $wpdb->get_var($sql);
-    
+
+
     if($result != null) {
         $current_time = date("Y-m-d h:m:s");
         $sql = "UPDATE contact SET CTC_FIRST_NAME = '" . $ctc_first_name . "', 
