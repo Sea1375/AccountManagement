@@ -36,7 +36,7 @@ if ( have_posts() ) {
         <div class="d-flex justify-content-around m-3">
             <button type="button" onclick='add_fill()'>Add</button>
             <button type="button"  data-toggle="modal" data-target="#deleteModal">Delete</button>
-            <a href='' id='home'><button type="button" onclick='gotohome()'>Close</button></a>
+            <a href='<?=home_url();?>'><button type="button">Close</button></a>
         </div>
 
         <div class='form-field p-5 mt-5 invisible'>
@@ -434,10 +434,6 @@ if ( have_posts() ) {
             });
         }
 
-        function gotohome() {
-            
-        }
-        
     </script>
 <?php
 }

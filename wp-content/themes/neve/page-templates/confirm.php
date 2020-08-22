@@ -110,7 +110,7 @@ if ( have_posts() ) {
                     
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <a href='#'><button type="button" class='modal_button'>Confirm</button></a>
+                        <a href='<?=home_url();?>'><button type="button" class='modal_button'>Confirm</button></a>
                         <button type="button" data-dismiss="modal" class='modal_button'>Go back</button>
                     </div>
                     

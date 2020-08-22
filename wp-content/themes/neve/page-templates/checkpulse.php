@@ -16,9 +16,9 @@ if ( have_posts() ) {
         </div>
         <div class='m-2 p-3'>
         <div class="d-flex justify-content-around mb-3">
-            <a id='close'><button type='button' onclick='close_window()'>Close</button></a>
-            <a id='contact'><button type='button' style='font-size: 16px;'>Check contacts Info</button></a>
-            <a href='' id='home'><button type='button'>Home page</button></a>
+            <a href='<?=home_url();?>/thank-you'><button type='button'>Close</button></a>
+            <a href='<?=home_url();?>/my-contacts'><button type='button' style='font-size: 16px;'>Check contacts Info</button></a>
+            <a href='<?=home_url();?>'><button type='button'>Home page</button></a>
         </div>
     </div>
     
@@ -28,14 +28,7 @@ if ( have_posts() ) {
         console.log(random, '  ', x);
         $('#text').html(random[x]);
         
-        var route = '<?=home_url();?>' + '/my-contacts/';
-        $("#contact").attr("href", route);
-
-        route = '<?=home_url();?>' + '/sample-page/';
-        $("#home").attr("href", route);
         
-        route = '<?=home_url();?>' + '/thank-you/';
-        $("#close").attr("href", route);
         
     </script>
 <?php

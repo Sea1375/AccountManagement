@@ -81,8 +81,8 @@ if ( have_posts() ) {
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-info" onclick='save_content()'>Save</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onclick='save_content()'>Save</button>
+                            <button type="button" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -102,8 +102,8 @@ if ( have_posts() ) {
                     <div class='m-2 p-2 bg-warning invisible' id='alert_delete'>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info" onclick='delete_schedule()'>Delete</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" onclick='delete_schedule()'>Delete</button>
+                        <button type="button" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
