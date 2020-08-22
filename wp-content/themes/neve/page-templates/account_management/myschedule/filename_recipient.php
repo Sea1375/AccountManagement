@@ -4,7 +4,7 @@
 
     $account_id = $_POST['accountId'];
 
-    $sql = "SELECT FIL_ID, FIL_NAME FROM files WHERE FIL_ACCOUNT_ID = '" . $account_id . "'";
+    $sql = "SELECT FIL_ID, FIL_NAME FROM FILES WHERE FIL_ACCOUNT_ID = '" . $account_id . "'";
     $results = $wpdb->get_results($sql);
     
     $fil_ids = array();
@@ -13,7 +13,7 @@
         $filename = $filename . '<tr onclick="filename_click(this)"><td>' . $result->FIL_NAME . '</td></tr>';
     }
     
-    $sql = "SELECT CTC_ID, CTC_FIRST_NAME, CTC_LAST_NAME FROM contact WHERE CTC_ACCOUNT_ID = '" . $account_id . "'";
+    $sql = "SELECT CTC_ID, CTC_FIRST_NAME, CTC_LAST_NAME FROM CONTACT WHERE CTC_ACCOUNT_ID = '" . $account_id . "'";
     $results = $wpdb->get_results($sql);
 
     $ctc_ids = array();

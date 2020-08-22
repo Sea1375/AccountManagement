@@ -2,72 +2,92 @@
     include_once("../../../../../../wp-config.php");
     global $wpdb;
 
-    if($_SERVER['REQUEST_METHOD']=='POST'){
-        if(isset($_POST["filId"])) {
 
+    // $ch = curl_init();
+    // curl_setopt($ch, CURLOPT_URL, "https://staging-jdlandscaping-assets.s3.amazonaws.com/files/09d63d02-beb3-4a7e-8220-440baec268d6_4.jpg");
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    // $result = curl_exec($ch);
+    // curl_close($ch);
+    
+
+    // header('Content-Description: File Transfer');
+    // header('Content-Type: application/octet-stream');
+    // header('Content-Disposition: attachment; filename="1.jpg"');
+    // header('Expires: 0');
+    // header('Cache-Control: must-revalidate');
+    // header('Pragma: public');
+    // header('Content-Length: ' . filesize($file));
+    // echo $result;
+    // exit();
+    
+    if($_SERVER['REQUEST_METHOD']=='POST'){
+        
+        if(isset($_POST["filId"])) {
+           
             $account_id = $_POST['userId'];
             $filId = $_POST['filId'];
+            $answer = $_POST['answer'];
 
-            $sql = "SELECT FIL_NAME FROM files WHERE FIL_ID = '" . $filId . "'";
+            $sql = "SELECT FIL_NAME FROM FILES WHERE FIL_ID = '" . $filId . "'";
+           
             $target_file_name = $wpdb->get_var($sql);
-            
-            $cURLConnection = curl_init();
-            
-            $userId = 'u' . str_pad($account_id, 7 , '0' , STR_PAD_LEFT);
-            $presigned_request_url = 'https://4x7vfzp6vj.execute-api.us-east-1.amazonaws.com/v1/stage-file?user=' . $userId .'&object=' . $target_file_name;
+            $userId = 'u' . str_pad($account_id, 6 , '0' , STR_PAD_LEFT);
+/*
+            // Keyword file upload
+                $filename = explode('.', $target_file_name)[0] . '.ntty';
 
-            curl_setopt($cURLConnection, CURLOPT_URL, $presigned_request_url);
-            curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+                $nttyfile = fopen($filename, "w") or die("Unable to open file!");
+                fwrite($nttyfile, $answer);
+                fclose($nttyfile);
+                
+                $cURLConnection = curl_init();
+                $presigned_request_url = 'https://67qegqceo8.execute-api.us-east-1.amazonaws.com/v1/get-na-presignedurl?user=' . $userId .'&object=' . $filename;
+                
+                curl_setopt($cURLConnection, CURLOPT_URL, $presigned_request_url);
+                curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
 
-            $presigned_url = curl_exec($cURLConnection);
-            curl_close($cURLConnection);
+                $presigned_url = curl_exec($cURLConnection);
+                curl_close($cURLConnection);
 
-            //The resource that we want to download.
-            $presigned_url = substr($presigned_url, 1, -1);
-            echo $presigned_url;
+                $presigned_url = substr($presigned_url, 1, -1);
             
-            //The path & filename to save to.
-            $saveTo = 'E:' . "\\" . $target_file_name;
-            
-            //Open file handler.
-            $fp = fopen($saveTo, 'w+');
-            
-            //If $fp is FALSE, something went wrong.
-            if($fp === false){
-                throw new Exception('Could not open: ' . $saveTo);
-            }
-            
-            //Create a cURL handle.
-            $ch = curl_init($presigned_url);
-            
-            //Pass our file handle to cURL.
-            curl_setopt($ch, CURLOPT_FILE, $fp);
-            
-            //Timeout if the file doesn't download after 20 seconds.
-            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-            
-            //Execute the request.
-            curl_exec($ch);
-            
-            //If there was an error, throw an Exception
-            if(curl_errno($ch)){
-                throw new Exception(curl_error($ch));
-            }
-            
-            //Get the HTTP status code.
-            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            
-            //Close the cURL handler.
-            curl_close($ch);
-            
-            //Close the file handler.
-            fclose($fp);
-            
-            if($statusCode == 200){
-                echo 'Downloaded!';
-            } else{
-                echo "Status Code: " . $statusCode;
-            }
+                $file_path = $filename;
+
+                $p_file = fopen($file_path, "rb");
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
+                curl_setopt($curl, CURLOPT_HEADER, false);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_BINARYTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_URL, $presigned_url);
+                
+
+                curl_setopt($curl, CURLOPT_PUT, 1);
+                curl_setopt($curl, CURLOPT_INFILE, $p_file);
+                curl_setopt($curl, CURLOPT_INFILESIZE, filesize($file_path));
+                
+                $result = curl_exec($curl);
+                curl_close($curl);*/
+
+                //unlink($filename);
+               
+            //file download
+                $cURLConnection = curl_init();
+                $presigned_request_url = 'https://4x7vfzp6vj.execute-api.us-east-1.amazonaws.com/v1/stage-file?user=' . $userId .'&object=' . $target_file_name;
+                curl_setopt($cURLConnection, CURLOPT_URL, $presigned_request_url);
+                curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+                echo $presigned_request_url;
+                exit;
+                $presigned_url = curl_exec($cURLConnection);
+                curl_close($cURLConnection);
+                
+                $presigned_url = substr($presigned_url, 1, -1);
+                echo $presigned_url;
+                exit;
+                //'https://staging-jdlandscaping-assets.s3.amazonaws.com/files/09d63d02-beb3-4a7e-8220-440baec268d6_4.jpg'
+                echo json_encode(Array('url' => $presigned_url ));
+                exit;
         }
     }
+    echo 'error';
 ?>

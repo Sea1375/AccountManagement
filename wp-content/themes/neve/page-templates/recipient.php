@@ -17,10 +17,10 @@ if ( have_posts() ) {
 
     $contact_id = $current_user->ID;
     
-    $pln_expiry_days = $wpdb->get_var("SELECT PLN_EXPIRY_DAYS FROM account, plan WHERE ACT_ID = '" . $account_id . "' AND ACT_PLAN = PLN_CODE");
-    $cnf_conf_date = $wpdb->get_var("SELECT CNF_CONF_DATE FROM confirm WHERE CNF_ACCOUNT_ID = '" . $account_id . "' AND CNF_CONTACT_ID = '" . $contact_id . "'");
+    $pln_expiry_days = $wpdb->get_var("SELECT PLN_EXPIRY_DAYS FROM ACCOUNT, PLAN WHERE ACT_ID = '" . $account_id . "' AND ACT_PLAN = PLN_CODE");
+    $cnf_conf_date = $wpdb->get_var("SELECT CNF_CONF_DATE FROM CONFIRM WHERE CNF_ACCOUNT_ID = '" . $account_id . "' AND CNF_CONTACT_ID = '" . $contact_id . "'");
 
-    $sql = "SELECT SCH_ID, SCH_FILE_ID, SCH_TYPE, SCH_SCHEDULE_DATE, SCH_NB_DAYS FROM schedule WHERE SCH_ACCOUNT_ID = '" . $account_id . "' AND SCH_CONTACT_ID = '" . $contact_id . "'";
+    $sql = "SELECT SCH_ID, SCH_FILE_ID, SCH_TYPE, SCH_SCHEDULE_DATE, SCH_NB_DAYS FROM SCHEDULE WHERE SCH_ACCOUNT_ID = '" . $account_id . "' AND SCH_CONTACT_ID = '" . $contact_id . "'";
     $results = $wpdb->get_results($sql);
 
     foreach($results as $result) {
@@ -35,7 +35,7 @@ if ( have_posts() ) {
             $until = date('Y-m-d', strtotime($cnf_conf_date. ' + ' . ($pln_expiry_days + $sch_nb_days) . ' days'));
         }
         $until_max = max($until_max, $until);
-        $file_name = $wpdb->get_var("SELECT FIL_NAME FROM files WHERE FIL_ID = '" . $result->SCH_FILE_ID . "'");
+        $file_name = $wpdb->get_var("SELECT FIL_NAME FROM FILES WHERE FIL_ID = '" . $result->SCH_FILE_ID . "'");
         $fil_ids = $fil_ids . ' ' . $result->SCH_FILE_ID;
         
         $table_html = $table_html . '<tr onclick="row_click(this)"><td>' . $file_name . '</td></tr>';
@@ -76,8 +76,8 @@ if ( have_posts() ) {
         </div>
         <div class='m-4' >
             <div class="d-flex justify-content-around mb-3">
-                <button type="button" class="btn btn-info" onclick='file_download()'>Download</button>
-                <button type="button" class="btn btn-info"'>Cancel</button>
+                <button type="button" onclick='file_download()'>Download</button>
+                <button type="button">Cancel</button>
             </div>
         </div>
         <div class='my-2 p-2 bg-warning invisible text-center' id='del_and_down'></div>

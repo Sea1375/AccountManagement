@@ -55,6 +55,18 @@ define( 'SECURE_AUTH_SALT', '?#jhRj+)|?a5f|:L^J:,L5)f]q2B31Wn+tvR0b/V8+pEyeRuhvb
 define( 'LOGGED_IN_SALT',   '6InQT[OTSjn`Zn^a!25hms;mACo-<55O=mfn;zk;$n=e wnnwd7t0mnJl^tcPWG`' );
 define( 'NONCE_SALT',       'b`ovbp$|9fnKaS=yJ0Q7uw*Ns+S?); =%6_i=od2BL7Y^h}hOr_KEI*z6-d`FF <' );
 
+define('ACCOUNT', 'account');
+define('CONTACT', 'contact');
+define('CONFIRM', 'confirm');
+define('COUNTRY', 'country');
+define('EXTENSION', 'extension');
+define('FILES', 'files');
+define('PLAN', 'plan');
+define('PULSE_CHECKS', 'pulse_checks');
+define('RECIPIENT_DOWNLOAD', 'recipient_download');
+define('SCHEDULE', 'schedule');
+
+define('FILE_SIZE', 450);
 /**#@-*/
 
 /**

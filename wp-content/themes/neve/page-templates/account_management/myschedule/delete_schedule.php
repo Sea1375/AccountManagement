@@ -4,7 +4,7 @@
     
     $schedule_id = $_POST['schedule_id'];
     
-    $sql = "DELETE FROM schedule WHERE SCH_ID = '" . $schedule_id . "'";
+    $sql = "DELETE FROM SCHEDULE WHERE SCH_ID = '" . $schedule_id . "'";
     $wpdb->query($sql);
     
     echo 'success';

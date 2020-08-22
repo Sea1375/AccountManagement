@@ -15,7 +15,7 @@ if ( have_posts() ) {
     $act_last_name = $result[0]->ACT_LAST_NAME;
     
     $contact_id = $current_user->ID;
-    $sql = "SELECT CTC_MESSAGE FROM contact WHERE CTC_ACCOUNT_ID = '" . $account_id . "' AND CTC_ID = '" . $contact_id . "'";
+    $sql = "SELECT CTC_MESSAGE FROM CONTACT WHERE CTC_ACCOUNT_ID = '" . $account_id . "' AND CTC_ID = '" . $contact_id . "'";
     $ctc_message = $wpdb->get_var($sql);
     
 ?>

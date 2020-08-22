@@ -28,7 +28,7 @@
         $act_phone = $_POST['mobileNumber'];
         $current_time = date("Y-m-d h:m:s");
 
-        $sql = "UPDATE account SET ACT_FIRST_NAME = '" . $act_first_name . "', 
+        $sql = "UPDATE ACCOUNT SET ACT_FIRST_NAME = '" . $act_first_name . "', 
             ACT_LAST_NAME = '" . $act_last_name . "', 
             ACT_ADDRESS_LINE1 = '" . $act_address_line1 . "', 
             ACT_ADDRESS_LINE2 = '" . $act_address_line2 . "', 

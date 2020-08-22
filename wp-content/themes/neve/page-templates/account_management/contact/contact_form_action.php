@@ -14,7 +14,7 @@
     $ctc_account_id = $_POST['accountId'];
     $ctc_wp_user_id = get_current_user_id();
     
-    $sql = "SELECT CTC_ID FROM contact WHERE CTC_ACCOUNT_ID = '" . $ctc_account_id . "'AND CTC_EMAIL = '" . $ctc_email. "'";
+    $sql = "SELECT CTC_ID FROM CONTACT WHERE CTC_ACCOUNT_ID = '" . $ctc_account_id . "'AND CTC_EMAIL = '" . $ctc_email. "'";
     $result = $wpdb->get_var($sql);
     
     if($result != null) {

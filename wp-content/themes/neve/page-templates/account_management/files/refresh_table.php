@@ -4,13 +4,11 @@
 
     $account_id = $_POST['accountId'];
     
-    $sql = "SELECT FIL_ID, FIL_NAME, FIL_SIZE, FIL_LAST_UPLOAD_DATE FROM files WHERE FIL_ACCOUNT_ID = '" . $account_id . "'";
+    $sql = "SELECT FIL_ID, FIL_NAME, FIL_SIZE, FIL_LAST_UPLOAD_DATE FROM FILES WHERE FIL_ACCOUNT_ID = '" . $account_id . "'";
     $results = $wpdb->get_results($sql);
-
-    if( count($results) ) {
-        $table_html = "<tr><th>File Name</th><th>Last Upload Date</th><th>Size(KB)</th></tr>";
-    }
-
+    
+    $table_html = "<tr><th>File Name</th><th>Last Upload Date</th><th>Size(KB)</th></tr>";
+    
     $fil_ids = array();
     foreach($results as $result) {
         array_push($fil_ids, $result->FIL_ID);
@@ -22,13 +20,13 @@
         $table_html = $table_html . '<td>' . $result->FIL_SIZE . '</td></tr>';
     }
     
-    $sql = "SELECT ACT_PLAN FROM account WHERE ACT_ID = '" . $account_id . "'";
+    $sql = "SELECT ACT_PLAN FROM ACCOUNT WHERE ACT_ID = '" . $account_id . "'";
     $plan_code = $wpdb->get_var($sql);
 
-    $sql = "SELECT PLN_MAX_STORAGE FROM plan WHERE PLN_CODE = '" . $plan_code . "'";
+    $sql = "SELECT PLN_MAX_STORAGE FROM PLAN WHERE PLN_CODE = '" . $plan_code . "'";
     $capacity = round($wpdb->get_var($sql) / 1024, 3);
 
-    $sql = "SELECT FIL_SIZE FROM files WHERE FIL_ACCOUNT_ID = '" . $account_id . "'";
+    $sql = "SELECT FIL_SIZE FROM FILES WHERE FIL_ACCOUNT_ID = '" . $account_id . "'";
     $results = $wpdb->get_results($sql);
 
     $used = 0;
@@ -41,9 +39,9 @@
     $result = array(
         'ids' => $fil_ids,
         'tableContent' => $table_html,
-        'capacity' => $capacity,
-        'used' => $used,
-        'available' => $available,
+        'capacity' => $capacity . 'MB',
+        'used' => $used . 'MB',
+        'available' => $available . 'MB',
     );
     //print_r($result);
     echo json_encode($result, JSON_FORCE_OBJECT);

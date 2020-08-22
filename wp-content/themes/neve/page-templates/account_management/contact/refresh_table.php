@@ -4,7 +4,7 @@
     
     $ctc_account_id = $_POST['accountId'];
 
-    $sql = "SELECT CTC_ID, CTC_FIRST_NAME, CTC_LAST_NAME, CTC_EMAIL, CTC_PHONE, CTC_TYPE FROM contact WHERE CTC_ACCOUNT_ID = '" . $ctc_account_id . "'";
+    $sql = "SELECT CTC_ID, CTC_FIRST_NAME, CTC_LAST_NAME, CTC_EMAIL, CTC_PHONE, CTC_TYPE FROM CONTACT WHERE CTC_ACCOUNT_ID = '" . $ctc_account_id . "'";
    
     $results = $wpdb->get_results($sql);
 

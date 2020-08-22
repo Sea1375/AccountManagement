@@ -3,7 +3,7 @@
     global $wpdb;
 
     $account_id = $_POST['accountId'];
-    $sql = "SELECT SCH_ID, SCH_FILE_ID, SCH_CONTACT_ID, SCH_TYPE, SCH_SCHEDULE_DATE, SCH_NB_DAYS, SCH_MESSAGE FROM schedule WHERE SCH_ACCOUNT_ID = '" . $account_id . "'";
+    $sql = "SELECT SCH_ID, SCH_FILE_ID, SCH_CONTACT_ID, SCH_TYPE, SCH_SCHEDULE_DATE, SCH_NB_DAYS, SCH_MESSAGE FROM SCHEDULE WHERE SCH_ACCOUNT_ID = '" . $account_id . "'";
     $results = $wpdb->get_results($sql);
 
     $table_html = "<tr><th>File Name</th><th>Recipient Name</th><th>Schedule</th></tr>";
@@ -20,10 +20,10 @@
             $schedule = $result->SCH_NB_DAYS . ' days after';
         }
         
-        $sql = "SELECT FIL_NAME FROM files WHERE FIL_ID = '" . $file_id . "'";
+        $sql = "SELECT FIL_NAME FROM FILES WHERE FIL_ID = '" . $file_id . "'";
         $file_name = $wpdb->get_var($sql);
 
-        $sql = "SELECT CTC_FIRST_NAME, CTC_LAST_NAME FROM contact WHERE CTC_ID = '" . $recipient_id . "'";
+        $sql = "SELECT CTC_FIRST_NAME, CTC_LAST_NAME FROM CONTACT WHERE CTC_ID = '" . $recipient_id . "'";
         $result = $wpdb->get_results($sql)[0];
         $recipient_name = $result->CTC_FIRST_NAME . ' ' . $result->CTC_LAST_NAME;
 

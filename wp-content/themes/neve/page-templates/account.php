@@ -11,7 +11,7 @@ if ( have_posts() ) {
     $sql = "SELECT ACT_FIRST_NAME, ACT_PLAN, ACT_ADDRESS_LINE1, ACT_EMAIL, ACT_PHONE,
       ACT_NOTIF_EMAIL, ACT_NOTIF_SMS, ACT_LAST_NAME, ACT_COUNTRY,
       ACT_AUTO_PULSE_CHECK, ACT_PULSE_CHECK_FREQ, ACT_ADDRESS_LINE2, ACT_CITY, ACT_STATE_PROVINCE,
-       ACT_POSTAL_CODE, ACT_BIRTH_YEAR FROM account WHERE ACT_ID = '" . $account_id ."'";
+       ACT_POSTAL_CODE, ACT_BIRTH_YEAR FROM ACCOUNT WHERE ACT_ID = '" . $account_id ."'";
     $results = $wpdb->get_results($sql);
 
     $act_firstName = $results[0]->ACT_FIRST_NAME;

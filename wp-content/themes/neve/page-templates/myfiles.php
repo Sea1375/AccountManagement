@@ -4,7 +4,7 @@
 <?php
 if ( have_posts() ) {
 
-    $account_id = wp_get_current_user()->ID;
+    $account_id = wp_get_current_user()->ID;    
 
 ?>
 
@@ -17,7 +17,6 @@ if ( have_posts() ) {
 
     <div class="container mt-1 p-3">
         
-
         <div class='mx-5'>
             <div class='row'>
                 <div class='col-12 col-md-8 mt-5'>
@@ -66,6 +65,12 @@ if ( have_posts() ) {
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
+                            <h5>Please fill here your question:</h5>
+                            <textarea rows="1" class="form-control my-1" id="question" name="question"></textarea>
+
+                            <h5>And then enter your answer:</h5>
+                            <input type="text" class="form-control my-1" name="answer" id="answer">
+
                             <h5>Please choose a file to upload</h5>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="uploadFile">
@@ -75,7 +80,7 @@ if ( have_posts() ) {
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class='modal_button' onclick='upload_file()' data-dismiss="modal">Upload</button>
+                            <button type="button" class='modal_button' onclick='upload_file()'>Upload</button>
                             <button type="button" data-dismiss="modal" class='modal_button'>Close</button>
                         </div>
                     </div>
@@ -94,16 +99,16 @@ if ( have_posts() ) {
                         </div>
                         <div class="modal-body">
                             <div class="card-body">
-                                <h5>Please choose a location to download a file</h5>
-                                <div class="custom-file">                               
-                                    <input type="file" class='custom-file-input' id='downloadFile' webkitdirectory directory />
-                                    <label class="custom-file-label" for="downloadFile">Choose Destination</label>
-                                </div>
+                                <h5>Here is a question.</h5>
+                                <textarea rows="1" class="form-control my-1" id="download_question" name="download_question"></textarea>
+
+                                <h5>Enter your answer:</h5>
+                                <input type="text" class="form-control my-1" name="download_answer" id="download_answer">
                             </div>
                             <div class='my-2 p-2 bg-warning invisible text-center' id='down'></div>
                         </div>
                         <div class="modal-footer">
-                        <button type="button" class='modal_button' onclick='download_file()' data-dismiss="modal">Upload</button>
+                        <button type="button" class='modal_button' onclick='file_download()'>Download</button>
                             <button type="button" data-dismiss="modal" class='modal_button'>Close</button>
                         </div>
                     </div>
@@ -123,7 +128,13 @@ if ( have_posts() ) {
                     
                     <!-- Modal body -->
                     <div class="modal-body">
-                        Do you confirm deleting?
+                        <h5 class='text-center'>Do you confirm deleting?</h5>
+                        <div class="card-body">
+                            <h5>Here is a question.</h5>
+                            <textarea rows="1" class="form-control my-1" id="delete_question" name="delete_question"></textarea>
+                            <h5>Enter your answer:</h5>
+                            <input type="text" class="form-control my-1" name="download_answer" id="download_answer">
+                        </div>
                     </div>
                     
                     <!-- Modal footer -->
@@ -152,13 +163,30 @@ if ( have_posts() ) {
         });
         
         function upload_file() {
-                
+            console.log(selectedFile);
+            if($('#question').val() == '' || $('input[name=answer]').val() == '') {
+                $('#alert').removeClass('invisible');
+                $('#alert').html('<h6>The answer and question field should be filled. </h6>');
+                return;
+            }
+            if($('#question').val().includes($('input[name=answer]').val())) {
+                $('#alert').removeClass('invisible');
+                $('#alert').html('<h6>The answer field should not be included in the question. </h6>');
+                return;
+            }
+            if(selectedFile == undefined) {
+                $('#alert').removeClass('invisible');
+                $('#alert').html('<h6>Please select a file. </h6>');
+                return;
+            }
             var currentUrl = $('#theme_url').val() + '/page-templates/account_management/files/file_upload.php';
             var formData = new FormData();
             
             formData.append("file", selectedFile);
             formData.append('available', $('#available').html());
             formData.append('accountId', parseInt('<?php echo $account_id; ?>'));
+            formData.append('question', $('#question').val());
+            formData.append('answer', $('input[name=answer]').val());
 
             $.ajax({
                 url : currentUrl || window.location.pathname,
@@ -168,11 +196,11 @@ if ( have_posts() ) {
                 processData: false,
                 cached: false,
                 success: function (data) {
-                    console.log('success  ', data);
                     $('#alert').removeClass('invisible');
                     if(data == "File is too large.") {
-                        console.log('enter');
                         $('#alert').html('<h6>File is too large.</h6>');
+                    } else if(data == "This file extention is not supported.") {
+                        $('#alert').html('<h6>This file extention is not supported.</h6>');
                     } else {
                         $('#alert').html('<h6>Upload is succeeded.</h6>');
                         refresh_table();
@@ -189,9 +217,22 @@ if ( have_posts() ) {
         }
 
         function row_click(row) {
-            $('table > tr').css('background-color', '#ffffff');
-            $(row).css('background-color', '#f2f2f2');
+            $('table > tr').css('background-color', '#f0f0f0');
+            $(row).css('background-color', 'lightgrey');
             $('input[name=fil_id]').val(fil_ids[row.rowIndex-1]);
+
+            $.ajax({
+                type: "POST",
+                url: $('#theme_url').val() + '/page-templates/account_management/files/display_question.php',
+                data: { filId: $('input[name=fil_id]').val()}, 
+                success:function(data){
+                    $('#download_question').val(data);
+                    $('#delete_question').val(data);
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
         }
 
         function refresh_table() {      
@@ -217,8 +258,11 @@ if ( have_posts() ) {
 
         function delete_file() {
             if($('input[name=fil_id]').val() == '') {
-                alert('Please select a file to delete.');
+                $('#down').removeClass('invisible');
+                $('#down').html('<h6>Please a file to download.</h6>');
+                return;
             }
+            
             $.ajax({
                 type: "POST",
                 url: $('#theme_url').val() + '/page-templates/account_management/files/file_delete.php',
@@ -241,22 +285,32 @@ if ( have_posts() ) {
         }
 
         function file_download() {
+            
             if($('input[name=fil_id]').val() == '') {
-                $('#down').removeClass('invisible');
-                $('#down').html('<h6>Please a file to download.</h6>');
-                return;
+                 $('#down').removeClass('invisible');
+                 $('#down').html('<h6>Please a file to download.</h6>');
+                 return;
             }
             $.ajax({
                 type: "POST",
                 url: $('#theme_url').val() + '/page-templates/account_management/files/file_download.php',
                 data: { 
                     userId: $('input[name=accountId]').val(),
-                    filId: $('input[name=fil_id]').val()
+                    filId: $('input[name=fil_id]').val(),
+                    answer: $('input[name=download_answer]').val(),
                 }, 
                 success:function(data){
                     console.log(data);
+                    /*
+                    if(data == 'error') {
+                        $('#del_and_down').removeClass('invisible');
+                        $('#del_and_down').html('<h6>The Download is failed.</h6>');
+                        return;
+                    }
+                    data = JSON.parse(data);
                     $('#del_and_down').removeClass('invisible');
                     $('#del_and_down').html('<h6>The Download is succeeded.</h6>');
+                    window.open(data.url);*/
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     alert(errorThrown);
