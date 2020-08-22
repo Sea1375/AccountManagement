@@ -31,9 +31,10 @@
                 echo "This file extention is not supported.";
                 exit;
             }
-
-            $sql = "INSERT INTO files (FIL_ACCOUNT_ID, FIL_NAME, FIL_SIZE, FIL_LAST_UPLOAD_DATE, FIL_QUESTION) 
-                VALUES ('$account_id', '$target_file_name', '$target_file_size', CURRENT_TIMESTAMP, '$question')";
+            $current_time = date("Y-m-d h:m:s");
+            $fil_trail_code = $account_id . ' ' .  $target_file_name . ' ' . $target_file_size . ' ' . $account_id;
+            $sql = "INSERT INTO files (FIL_ACCOUNT_ID, FIL_NAME, FIL_SIZE, FIL_LAST_UPLOAD_DATE, FIL_QUESTION, FIL_TRAIL_CODE)
+                VALUES ('$account_id', '$target_file_name', '$target_file_size', '$current_time' , '$question', '$fil_trail_code')";
             $wpdb->query($sql);
 
 
