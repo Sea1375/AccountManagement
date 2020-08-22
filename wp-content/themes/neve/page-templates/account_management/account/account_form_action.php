@@ -27,6 +27,9 @@
         $act_birth_year = $_POST['birthYear'];
         $act_phone = $_POST['mobileNumber'];
         $current_time = date("Y-m-d h:m:s");
+        $act_trail_code = $act_accountId . ' ' . $act_first_name  . ' ' . $act_last_name  . ' ' . $act_address_line1  . ' ' . $act_address_line2  . ' ' . $act_city  . ' ' .
+            $act_state_province . ' ' . $act_postal_code  . ' ' . $act_country  . ' ' . $act_birth_year  . ' ' . $act_phone  . ' ' . $act_notif_sms  . ' ' .
+            $act_notif_email . ' ' . $act_pulse_check_freq  . ' ' . $act_pulse_check_freq  . ' ' . $act_auto  . ' ' . $current_time;
 
         $sql = "UPDATE ACCOUNT SET ACT_FIRST_NAME = '" . $act_first_name . "', 
             ACT_LAST_NAME = '" . $act_last_name . "', 
@@ -36,12 +39,13 @@
             ACT_STATE_PROVINCE = '" . $act_state_province . "', 
             ACT_POSTAL_CODE = '" . $act_postal_code . "', 
             ACT_COUNTRY = '" . $act_country . "', 
-            ACT_BIRTH_YEAR = '" . $act_birth_year . "', 
+            ACT_BIRTH_YEAR = '" . $act_birth_year . "',
             ACT_PHONE = '" . $act_phone . "', 
             ACT_NOTIF_SMS = '" . $act_notif_sms . "', 
             ACT_NOTIF_EMAIL = '" . $act_notif_email . "', 
             ACT_PULSE_CHECK_FREQ = '" . $act_pulse_check_freq . "', 
-            ACT_AUTO_PULSE_CHECK = '" . $act_auto . "', 
+            ACT_AUTO_PULSE_CHECK = '" . $act_auto . "',
+            ACT_TRAIL_CODE = '" . $act_trail_code . "',
             ACT_LAST_UPDATE = '" . $current_time . "' WHERE ACT_USER_ID = '" . $act_accountId . "'";
 
         $wpdb->query($sql); 
