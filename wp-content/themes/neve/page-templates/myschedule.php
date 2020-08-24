@@ -14,20 +14,21 @@ if ( have_posts() ) {
     </div>
     <div class="container mt-5 p-3">
         <h2 class="p-2 mx-3"><strong>My Schedule</strong></h2>
-        <div class='m-2'>
-            <div class="m-4" style="max-height: 200px; overflow: auto;">
-                <div class="table-responsive-sm">
-                    <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='scheduleTable'>
-                    </table>
+        <div class='form-field p-5'>
+            <div class='m-2'>
+                <div class="m-4" style="max-height: 200px; overflow: auto;">
+                    <div class="table-responsive-sm">
+                        <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='scheduleTable'>
+                        </table>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-around my-3">
+                    <button type="button" onclick='filename_recipient()'>Add</button>
+                    <button type="button" onclick='delete_modal_check()'>Delete</button>
+                    <button type="button" onclick='update_modal_check()'>Update</button>
                 </div>
             </div>
-            <div class="d-flex justify-content-around my-3">
-                <button type="button" onclick='filename_recipient()'>Add</button>
-                <button type="button" onclick='delete_modal_check()'>Delete</button>
-                <button type="button" onclick='update_modal_check()'>Update</button>
-            </div>
         </div>
-        
         <div id="addModal" class="modal fade" tabindex="-1" role="dialog">
             <form method="post" enctype="multipart/form-data" id='schedule' action='schedule_add.php'>
                 <input type='hidden' value='D' name='selection' />

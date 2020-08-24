@@ -41,18 +41,19 @@ if ( have_posts() ) {
                     </div>
                 </div>
             </div>
-
-            <div class="m-4" style="max-height: 200px; overflow: auto;" class='border'>
-                <div class="table-responsive-sm">
-                    <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='filesTable'>
-                    </table>
+            <div class='form-field p-5'>
+                <div class="m-4" style="max-height: 200px; overflow: auto;" class='border'>
+                    <div class="table-responsive-sm">
+                        <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='filesTable'>
+                        </table>
+                    </div>
                 </div>
-            </div>
-                
-            <div class="d-flex justify-content-around mb-3">
-                <button type="button" data-toggle="modal" data-target="#addModal">Add</button>
-                <button type="button" data-toggle="modal" data-target="#deleteModal">Delete</button>
-                <button type="button" data-toggle="modal" data-target="#downloadModal">Download</button>
+
+                <div class="d-flex justify-content-around mb-3">
+                    <button type="button" data-toggle="modal" data-target="#addModal">Add</button>
+                    <button type="button" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                    <button type="button" data-toggle="modal" data-target="#downloadModal">Download</button>
+                </div>
             </div>
         </div>
 

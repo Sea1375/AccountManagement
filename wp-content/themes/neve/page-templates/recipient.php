@@ -50,37 +50,40 @@ if ( have_posts() ) {
     </div>
 
     <div class="container mt-5 p-3">
-        <div class='m-2 p-2'>
-            <h3>Dear <b><?php echo '  ' . $first_name . ' ' . $last_name . ','; ?></b></h3>
-            <div class='text mt-3 px-2'>
-                <b><?php echo $act_first_name . ' ' . $act_last_name; ?></b> has subscribed to our service named Need2TellYou.<br>
-                You can find explanation of what this service does by clicking <a href="#" id='home'>here</a><br>
-                As per <b><?php echo $act_first_name; ?></b> `s wish, you will find below file(s) he wants you to receive:
-                For your information, the files(s) will be available for download until <b><?php echo $until_max; ?></b>
-            </div>
-        </div>
-                
-        <div class="m-2 p-2 mt-5">
-            <h5>Here is below a personal message <b><?php echo $act_first_name; ?></b> left for you:</h5>
-            <div class='text mt-3 px-2'><h6><b><?php echo $ctc_message; ?></b></h6></div>
-        </div>
-        <div class='m-5'>
-            <h5>Filename(*)</h5>
-            <div style="max-height: 200px; overflow: auto;">
-                <div class="table-responsive-sm">
-                    <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='filenameTable'>
-                    <?php echo $table_html; ?>
-                    </table>
+        <h2 class="p-2 mx-3"><strong>Recipient</strong></h2>
+        <div class='form-field p-5'>
+            <div class='m-2 p-2'>
+                <h3>Dear <b><?php echo '  ' . $first_name . ' ' . $last_name . ','; ?></b></h3>
+                <div class='text mt-3 px-2'>
+                    <b><?php echo $act_first_name . ' ' . $act_last_name; ?></b> has subscribed to our service named Need2TellYou.<br>
+                    You can find explanation of what this service does by clicking <a href="#" id='home'>here</a><br>
+                    As per <b><?php echo $act_first_name; ?></b> `s wish, you will find below file(s) he wants you to receive:
+                    For your information, the files(s) will be available for download until <b><?php echo $until_max; ?></b>
                 </div>
             </div>
-        </div>
-        <div class='m-4' >
-            <div class="d-flex justify-content-around mb-3">
-                <button type="button" onclick='file_download()'>Download</button>
-                <a href='<?=home_url();?>'><button type="button">Cancel</button></a>
+
+            <div class="m-2 p-2 mt-5">
+                <h5>Here is below a personal message <b><?php echo $act_first_name; ?></b> left for you:</h5>
+                <div class='text mt-3 px-2'><h6><b><?php echo $ctc_message; ?></b></h6></div>
             </div>
+            <div class='m-5'>
+                <h5>Filename(*)</h5>
+                <div style="max-height: 200px; overflow: auto;">
+                    <div class="table-responsive-sm">
+                        <table class="table table-bordered" style="margin-bottom: 0; margin-top: 0; " id='filenameTable'>
+                        <?php echo $table_html; ?>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class='m-4' >
+                <div class="d-flex justify-content-around mb-3">
+                    <button type="button" onclick='file_download()'>Download</button>
+                    <a href='<?=home_url();?>'><button type="button">Cancel</button></a>
+                </div>
+            </div>
+            <div class='my-2 p-2 bg-warning invisible text-center' id='del_and_down'></div>
         </div>
-        <div class='my-2 p-2 bg-warning invisible text-center' id='del_and_down'></div>
     </div>
     <script>
 
