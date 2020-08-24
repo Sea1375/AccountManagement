@@ -39,9 +39,9 @@
     $result = array(
         'ids' => $fil_ids,
         'tableContent' => $table_html,
-        'capacity' => $capacity . 'MB',
-        'used' => $used . 'MB',
-        'available' => $available . 'MB',
+        'capacity' => $capacity . ' MB',
+        'used' => $used . ' MB',
+        'available' => $available . ' MB',
     );
     //print_r($result);
     echo json_encode($result, JSON_FORCE_OBJECT);

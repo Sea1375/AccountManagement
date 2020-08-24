@@ -104,7 +104,7 @@ if ( have_posts() ) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" onclick='delete_schedule()'>Delete</button>
-                        <button type="button" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

@@ -79,7 +79,7 @@ if ( have_posts() ) {
             <div class='m-4' >
                 <div class="d-flex justify-content-around mb-3">
                     <button type="button" onclick='file_download()'>Download</button>
-                    <a href='<?=home_url();?>'><button type="button">Cancel</button></a>
+                    <a href='<?=home_url();?>'><button type="button">Close</button></a>
                 </div>
             </div>
             <div class='my-2 p-2 bg-warning invisible text-center' id='del_and_down'></div>

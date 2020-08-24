@@ -41,7 +41,7 @@ if ( have_posts() ) {
     $act_birthYear = $results[0]->ACT_BIRTH_YEAR;
 
     $readonly = '';
-
+/*
     if($act_plan == 'FREE') {
         $readonly = 'readonly';
         $act_frequency = '4';
@@ -49,7 +49,7 @@ if ( have_posts() ) {
         $readonly = 'readonly';
         $act_frequency = '2';
     }
-
+*/
 ?>
     <!-- User definition -->
 
@@ -158,7 +158,7 @@ if ( have_posts() ) {
                     <div class="col-12 col-md-6">
                         <div class="form-group mx-3">
                             <label for="emailAddress">Email Address (*)</label>
-                            <input type="email" class="form-control input-lg" id="emailAddress" placeholder="Enter your email address" name="emailAddress" value='<?php echo $act_emailAddress; ?>' required readonly>
+                            <input type="email" class="form-control input-lg" id="emailAddress" placeholder="Enter your email address" name="emailAddress" value='<?php echo $act_emailAddress; ?>' required>
                             <div class="valid-feedback">Valid.</div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
@@ -228,7 +228,7 @@ if ( have_posts() ) {
             </form>
             <div class="d-flex justify-content-around m-3">
                 <button type="button" onclick='save()'>Save</button>
-                <button type="button" data-toggle="modal" data-target="#cancelModal" >Cancel</button>
+                <button type="button" data-toggle="modal" data-target="#cancelModal" >Close</button>
             </div>
         </div>
 

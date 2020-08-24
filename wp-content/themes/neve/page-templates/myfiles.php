@@ -1,4 +1,4 @@
-<?php /* Template Name: MyFiles */ ?>
+<?php /* Template Name: My Files */ ?>
 <?php get_header(); ?>
 
 <?php

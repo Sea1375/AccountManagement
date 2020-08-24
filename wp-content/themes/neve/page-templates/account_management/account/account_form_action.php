@@ -27,6 +27,11 @@
         $act_birth_year = $_POST['birthYear'];
         $act_phone = $_POST['mobileNumber'];
         $current_time = date("Y-m-d h:m:s");
+
+        $sql = "SELECT ACT_ID FROM account WHERE ACT_USER_ID = '" . $act_accountId . "'";
+        $act_id = $wpdb->get_var($sql);
+        $act_wp_login = 's' . str_pad($act_id, 6 , '0' , STR_PAD_LEFT);
+
         $act_trail_code = $act_accountId . ' ' . $act_first_name  . ' ' . $act_last_name  . ' ' . $act_address_line1  . ' ' . $act_address_line2  . ' ' . $act_city  . ' ' .
             $act_state_province . ' ' . $act_postal_code  . ' ' . $act_country  . ' ' . $act_birth_year  . ' ' . $act_phone  . ' ' . $act_notif_sms  . ' ' .
             $act_notif_email . ' ' . $act_pulse_check_freq  . ' ' . $act_pulse_check_freq  . ' ' . $act_auto  . ' ' . $current_time;
@@ -45,6 +50,7 @@
             ACT_NOTIF_EMAIL = '" . $act_notif_email . "', 
             ACT_PULSE_CHECK_FREQ = '" . $act_pulse_check_freq . "', 
             ACT_AUTO_PULSE_CHECK = '" . $act_auto . "',
+            ACT_WP_LOGIN = '" . $act_wp_login . "',
             ACT_TRAIL_CODE = '" . $act_trail_code . "',
             ACT_LAST_UPDATE = '" . $current_time . "' WHERE ACT_USER_ID = '" . $act_accountId . "'";
 

@@ -100,7 +100,7 @@ function aia_styles_scripts() {
 		wp_enqueue_style( 'bootstrap1', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css', array( 'neve-style' ) );
 		wp_enqueue_style( 'bootstrap2', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css', array( 'bootstrap1' ) );
 		wp_enqueue_style( 'intlTelInput', $theme_path .'/page-templates/account_management/build/css/intlTelInput.css', array( 'bootstrap2' ) );
-		wp_enqueue_style( 'home_customize', $theme_path .'/page-templates/account_management/home_customize.css', array( 'intlTelInput' ) );
+		wp_enqueue_style( 'home_custom', $theme_path .'/page-templates/account_management/home_custom.css', array( 'intlTelInput' ) );
 
 		wp_enqueue_script( 'script-1', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'script-2', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js', array( 'script-1' ) );
@@ -110,7 +110,7 @@ function aia_styles_scripts() {
 		wp_enqueue_script( 'intlTelInput-script', $theme_path . '/page-templates/account_management/build/js/intlTelInput.js', array( 'script-4' ) );
 		wp_enqueue_script( 'utils-script', $theme_path . '/page-templates/account_management/build/js/utils.js', array( 'intlTelInput-script' ) );
 
-		
+		//https://wpml.org/de/forums/topic/translate-custom-html-php-code/
 	}
 
 }

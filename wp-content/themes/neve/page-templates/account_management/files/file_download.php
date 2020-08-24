@@ -31,10 +31,10 @@
             $sql = "SELECT FIL_NAME FROM FILES WHERE FIL_ID = '" . $filId . "'";
            
             $target_file_name = $wpdb->get_var($sql);
-            $userId = 'u' . str_pad($account_id, 6 , '0' , STR_PAD_LEFT);
-/*
+            $userId = 's' . str_pad($account_id, 6 , '0' , STR_PAD_LEFT);
+
             // Keyword file upload
-                $filename = explode('.', $target_file_name)[0] . '.ntty';
+                $filename = explode('.', $target_file_name)[0] . '.o.ntty';
 
                 $nttyfile = fopen($filename, "w") or die("Unable to open file!");
                 fwrite($nttyfile, $answer);
@@ -67,23 +67,23 @@
                 curl_setopt($curl, CURLOPT_INFILESIZE, filesize($file_path));
                 
                 $result = curl_exec($curl);
-                curl_close($curl);*/
+                curl_close($curl);
 
                 //unlink($filename);
                
             //file download
                 $cURLConnection = curl_init();
-                $presigned_request_url = 'https://4x7vfzp6vj.execute-api.us-east-1.amazonaws.com/v1/stage-file?user=' . $userId .'&object=' . $target_file_name;
+                //$presigned_request_url = 'https://4x7vfzp6vj.execute-api.us-east-1.amazonaws.com/v1/stage-file?user=' . $userId .'&object=' . $target_file_name;
+                $presigned_request_url = 'https://4x7vfzp6vj.execute-api.us-east-1.amazonaws.com/v1/check-last-status?activity=fct-stage-file&object=' . $target_file_name. '&user=' . $userId;
                 curl_setopt($cURLConnection, CURLOPT_URL, $presigned_request_url);
                 curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
                 echo $presigned_request_url;
-                exit;
+
                 $presigned_url = curl_exec($cURLConnection);
                 curl_close($cURLConnection);
                 
                 $presigned_url = substr($presigned_url, 1, -1);
                 echo $presigned_url;
-                exit;
                 //'https://staging-jdlandscaping-assets.s3.amazonaws.com/files/09d63d02-beb3-4a7e-8220-440baec268d6_4.jpg'
                 echo json_encode(Array('url' => $presigned_url ));
                 exit;

@@ -38,7 +38,7 @@
             $wpdb->query($sql);
 
 
-            $filename = explode('.', $target_file_name)[0] . '.ntty';
+            $filename = explode('.', $target_file_name)[0] . '.i.ntty';
             $nttyfile = fopen($filename, "w") or die("Unable to open file!");
             fwrite($nttyfile, $answer);
             fclose($nttyfile);

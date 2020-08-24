@@ -164,8 +164,6 @@ if ( have_posts() ) {
                             <div style="position: absolute; left: 30px; top: -15px; background-color: white;" class="px-2">
                                 <p style="font-size: larger;"><strong> Contact Credentials </strong></p>
                             </div>
-                        </div>
-
                         <div class="mx-4">
                             <div class="form-group">
                                 <label for="message">Message</label>
@@ -178,7 +176,7 @@ if ( have_posts() ) {
 
                 <div class="d-flex justify-content-around m-3">
                     <button type="button" onclick='save()'>Save</button>
-                    <button type="button" data-toggle="modal" data-target="#cancelModal" >Cancel</button>
+                    <button type="button" data-toggle="modal" data-target="#cancelModal" >Close</button>
                 </div>
             </div>
         </div>
