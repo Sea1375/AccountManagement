@@ -20,6 +20,7 @@ $header_classes = apply_filters( 'nv_header_classes', 'header' );
 		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 	<?php endif; ?>
 	<?php wp_head(); ?>
+	
 </head>
 
 <body  <?php body_class(); ?> <?php neve_body_attrs(); ?> >

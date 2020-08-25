@@ -12,7 +12,6 @@ if ( have_posts() ) {
     
     $sql = "SELECT MAX(CTC_ID) FROM CONTACT";
     $userID = $wpdb->get_var($sql) + 1;
-    $userID = 'u' . str_pad($userID, 7 , '0' , STR_PAD_LEFT);
     $password = wp_generate_password ( $length = 12, $special_chars = true, $extra_special_chars = false );
 
     $sql = "SELECT COUNT(CTC_TYPE) FROM CONTACT WHERE CTC_TYPE = 'GUARDIAN'";
@@ -57,6 +56,9 @@ if ( have_posts() ) {
                 <form action="contact_form_action.php" method="POST" id="contact" name='contact' class="needs-validation" novalidate>
                     <input type = 'hidden' name='accountId' value=<?php echo $ctc_account_id; ?> id='accountId' />
                     <input type='hidden' id='ctc_id' name='ctc_id' />
+
+                    <input type='hidden' id='userIdValue' name='userIdValue' value=<?php echo $userID; ?> />
+                    <input type='hidden' id='passwordValue' name='passwordValue' value=<?php echo $password; ?> />
 
                     <div class='mx-5 p-2'><h4 class='mx-5'>Contact Information</h4></div>
 
@@ -156,7 +158,7 @@ if ( have_posts() ) {
                                     <input type="text" class="form-control" id="userID" name="userID" readonly value='<?php echo $userID; ?>'>
                                 </div>
                                 <div class="col 12 col-md-6">
-                                    <label for="userID">Password</label>
+                                    <label for="password">Password</label>
                                     <input type="text" class="form-control" id="password" name="password" readonly value='<?php echo $password; ?>'>
                                 </div>
                             </div>
@@ -351,6 +353,7 @@ if ( have_posts() ) {
                     mobileNumber: $('input[name=mobileNumber]').val(),
                     country: $("select.country").children("option:selected").val(),
                     typeOfContact: $('input[name=typeOfContact]').val(),
+                    userID: $('input[name=userID]').val(),
                     password: $('input[name=password]').val(),
                     message: $.trim($("#message").val()),
                     accountId: $('input[name=accountId]').val()
@@ -359,6 +362,12 @@ if ( have_posts() ) {
                     console.log(data);
                     $('.save-modal-body').html('Your contact information has been ' + data + ' correctly.');
                     $('#saveModal').modal('show');
+                    if(data == 'inserted') {
+                        const presentUserId = $('input[name=userIdValue]').val();
+                        $('input[name=userIdValue]').val(presentUserId + 1);
+                        $('input[name=passwordValue]').val('<?php $password = wp_generate_password( $length = 12, $special_chars = true, $extra_special_chars = false); echo $password ?>');
+
+                    }
                     refresh_table();
                 },
                 error: function (jXHR, textStatus, errorThrown) {
@@ -411,13 +420,13 @@ if ( have_posts() ) {
                 success:function(data){
                     var dat = JSON.parse(data);
                     
-                    $('input[name=firstName').val(dat.CTC_FIRST_NAME);
-                    $('input[name=lastName').val(dat.CTC_LAST_NAME);
-                    $('input[name=emailAddress').val(dat.CTC_EMAIL);
-                    $('input[name=phone').val(dat.CTC_PHONE);
-                    $('input[name=userID').val($('input[name=ctc_id]').val());
-                    $('input[name=country').val(dat.CTC_COUNTRY);
-                    $('input[name=password').val(dat.CTC_PASSWORD);
+                    $('input[name=firstName]').val(dat.CTC_FIRST_NAME);
+                    $('input[name=lastName]').val(dat.CTC_LAST_NAME);
+                    $('input[name=emailAddress]').val(dat.CTC_EMAIL);
+                    $('input[name=phone]').val(dat.CTC_PHONE);
+                    $('input[name=userID]').val(dat.CTC_WP_USER_ALIAS);
+                    $('input[name=country]').val(dat.CTC_COUNTRY);
+                    $('input[name=password]').val(dat.CTC_PASSWORD);
                     $("textarea#message").val(dat.CTC_MESSAGE);
 
                     const radios = document.forms.contact.elements.typeOfContact;
@@ -447,6 +456,15 @@ if ( have_posts() ) {
                     ctc_ids = data.split("###")[0];
                     var tableContent = data.split("###")[1];
                     $('#contactTable').html(tableContent);
+                    const presentUserId =
+                    $('input[name=firstName').val('');
+                    $('input[name=lastName').val('');
+                    $('input[name=emailAddress').val('');
+                    $('input[name=phone').val('');
+                    $('input[name=userID]').val($('input[name=userIdValue]').val());
+                    //$('input[name=country').val('');
+                    $('input[name=password').val($('input[name=passwordValue]').val());
+                    $("textarea#message").val('');
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     alert(errorThrown);

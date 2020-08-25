@@ -11,7 +11,7 @@ if ( have_posts() ) {
     $sql = "SELECT ACT_FIRST_NAME, ACT_PLAN, ACT_ADDRESS_LINE1, ACT_EMAIL, ACT_PHONE,
       ACT_NOTIF_EMAIL, ACT_NOTIF_SMS, ACT_LAST_NAME, ACT_COUNTRY,
       ACT_AUTO_PULSE_CHECK, ACT_PULSE_CHECK_FREQ, ACT_ADDRESS_LINE2, ACT_CITY, ACT_STATE_PROVINCE,
-       ACT_POSTAL_CODE, ACT_BIRTH_YEAR FROM ACCOUNT WHERE ACT_ID = '" . $account_id ."'";
+       ACT_POSTAL_CODE, ACT_BIRTH_YEAR FROM ACCOUNT WHERE ACT_USER_ID = '" . $account_id ."'";
     $results = $wpdb->get_results($sql);
 
     $act_firstName = $results[0]->ACT_FIRST_NAME;
@@ -41,21 +41,24 @@ if ( have_posts() ) {
     $act_birthYear = $results[0]->ACT_BIRTH_YEAR;
 
     $readonly = '';
-/*
+    $automatic = '';
     if($act_plan == 'FREE') {
         $readonly = 'readonly';
         $act_frequency = '4';
+        $automatic = 'disabled';
     } else if($act_plan == 'STANDARD') {
         $readonly = 'readonly';
         $act_frequency = '2';
+        $automatic = 'disabled';
     }
-*/
+
 ?>
     <!-- User definition -->
 
     <div class="other_elements">
-		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
+		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="past_theme_url" />
 		<input type="hidden" value="<?=home_url();?>" id="site_url" />
+		<input type="hidden" value="<?=get_stylesheet_directory_uri();?>" id="theme_url" />
 	</div>
 
     <div class="container mt-5 p-3">
@@ -213,14 +216,14 @@ if ( have_posts() ) {
                             </label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="pulseRadio" value='automatic' <?php echo $act_auto; ?> > Automatic</label>
+                            <label><input type="radio" name="pulseRadio" value='automatic' <?php echo $act_auto; ?> <?php echo $automatic; ?> > Automatic</label>
                         </div>
                     </div>
                 </div>
                 <div>
                 <div class="m-5 p-2">
                     <div class='mx-3 form-group'>
-                        <input type="checkbox" value="" required> I have read and agree with the Need2Tellyou<sup>TM</sup> <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                        <input type="checkbox" value="" required> I have read and agree with the Need2Tellyou<sup>TM</sup> <a href="<?=home_url();?>/terms-and-conditions">Terms & Conditions</a> and <a href="<?=home_url();?>/privacy-policy">Privacy Policy</a>
                         <div class="valid-feedback" >Valid.</div>
                         <div class="invalid-feedback" >Please check out one field at least.</div>
                     </div>
@@ -330,6 +333,8 @@ if ( have_posts() ) {
         var stop;
         getCountryName();
         function getCountryName() {
+            console.log('countryname');
+
             var request_url = $('#theme_url').val() + '/page-templates/account_management/get_countryName.php';
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
@@ -359,8 +364,8 @@ if ( have_posts() ) {
                 data: {
                     accountId: $('input[name=accountId]').val(),
                     addressCheck: $('input[name=addressCheck]').val(),
-                    noticeSMS: $('input[name=noticeSMS]').val(),
-                    noticeEmail: $('input[name=noticeEmail]').val(),
+                    noticeSMS: $('input[name=noticeSMS]').prop('checked'),
+                    noticeEmail: $('input[name=noticeEmail]').prop('checked'),
                     actAuto: $('input[name=actAuto]').val(),
                     frequency: $('input[name=frequency]').val(),
                     firstName: $('input[name=firstName]').val(),
@@ -376,6 +381,7 @@ if ( have_posts() ) {
                     mobileNumber: $('input[name=mobileNumber]').val()
                 },
                 success: function (data) {
+                    console.log(data);
                     $('#saveModal').modal('show');
                 },
                 error: function (jXHR, textStatus, errorThrown) {
