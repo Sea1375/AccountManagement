@@ -11,7 +11,7 @@ if ( have_posts() ) {
     $ctc_account_id = wp_get_current_user()->ID;
     
     $sql = "SELECT MAX(CTC_ID) FROM CONTACT";
-    $userID = $wpdb->get_var($sql) + 1;
+    $userID = !$wpdb->get_var($sql) ? 0 : $wpdb->get_var($sql);
     $password = wp_generate_password ( $length = 12, $special_chars = true, $extra_special_chars = false );
 
     $sql = "SELECT COUNT(CTC_TYPE) FROM CONTACT WHERE CTC_TYPE = 'GUARDIAN'";
@@ -31,8 +31,9 @@ if ( have_posts() ) {
 
 ?>    
     <div class="other_elements">
-		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
-        <input type="hidden" value="<?=home_url();?>" id="site_url"/>
+	    <input type="hidden" value="<?php bloginfo('template_directory');?>" id="past_theme_url" />
+        <input type="hidden" value="<?=home_url();?>" id="site_url" />
+        <input type="hidden" value="<?=get_stylesheet_directory_uri();?>" id="theme_url" />
     </div>
     
     <div class="container mt-5 p-3">
@@ -52,7 +53,7 @@ if ( have_posts() ) {
                 <a href='<?=home_url();?>'><button type="button">Close</button></a>
             </div>
 
-            <div class='form-field p-5 mt-5 invisible'>
+            <div class='addModal p-5 mt-5 invisible'>
                 <form action="contact_form_action.php" method="POST" id="contact" name='contact' class="needs-validation" novalidate>
                     <input type = 'hidden' name='accountId' value=<?php echo $ctc_account_id; ?> id='accountId' />
                     <input type='hidden' id='ctc_id' name='ctc_id' />
@@ -200,7 +201,7 @@ if ( have_posts() ) {
                     
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class='modal_button'>OK</button>
+                        <button type="button" data-dismiss="modal" class='modal_button' onclick="disappear()">OK</button>
                     </div>
                     
                 </div>
@@ -331,7 +332,8 @@ if ( have_posts() ) {
         }
 
        function save() {
-            
+            console.log($('input[name=userID]').val());
+
             stop = 'N';
             validate();
             if(stop == 'Y') return;
@@ -362,12 +364,6 @@ if ( have_posts() ) {
                     console.log(data);
                     $('.save-modal-body').html('Your contact information has been ' + data + ' correctly.');
                     $('#saveModal').modal('show');
-                    if(data == 'inserted') {
-                        const presentUserId = $('input[name=userIdValue]').val();
-                        $('input[name=userIdValue]').val(presentUserId + 1);
-                        $('input[name=passwordValue]').val('<?php $password = wp_generate_password( $length = 12, $special_chars = true, $extra_special_chars = false); echo $password ?>');
-
-                    }
                     refresh_table();
                 },
                 error: function (jXHR, textStatus, errorThrown) {
@@ -390,11 +386,11 @@ if ( have_posts() ) {
 
 
         function row_click(row) {
-            $('table > tr').css('background-color', '#f0f0f0');
+            $('table > tr').css('background-color', '#ffffff');
             $(row).css('background-color', 'lightgrey');
             var string_ctcids = ctc_ids.split(" ");
             $('input[name=ctc_id]').val(string_ctcids[row.rowIndex]);
-            $('.form-field').removeClass('invisible');
+            $('.addModal').removeClass('invisible');
         }
         
         function delete_row() {
@@ -411,7 +407,7 @@ if ( have_posts() ) {
             });
         }
         function add_fill() {
-            $('.form-field').removeClass('invisible');
+            $('.addModal').removeClass('invisible');
             if($('input[name=ctc_id]').val() == '') return;
             $.ajax({
                 type: "POST",
@@ -424,7 +420,7 @@ if ( have_posts() ) {
                     $('input[name=lastName]').val(dat.CTC_LAST_NAME);
                     $('input[name=emailAddress]').val(dat.CTC_EMAIL);
                     $('input[name=phone]').val(dat.CTC_PHONE);
-                    $('input[name=userID]').val(dat.CTC_WP_USER_ALIAS);
+                    $('input[name=userID]').val(dat.CTC_WP_LOGIN);
                     $('input[name=country]').val(dat.CTC_COUNTRY);
                     $('input[name=password]').val(dat.CTC_PASSWORD);
                     $("textarea#message").val(dat.CTC_MESSAGE);
@@ -456,22 +452,29 @@ if ( have_posts() ) {
                     ctc_ids = data.split("###")[0];
                     var tableContent = data.split("###")[1];
                     $('#contactTable').html(tableContent);
-                    const presentUserId =
-                    $('input[name=firstName').val('');
-                    $('input[name=lastName').val('');
-                    $('input[name=emailAddress').val('');
-                    $('input[name=phone').val('');
-                    $('input[name=userID]').val($('input[name=userIdValue]').val());
-                    //$('input[name=country').val('');
-                    $('input[name=password').val($('input[name=passwordValue]').val());
+
+                    const presentUserId = parseInt($('input[name=userIdValue]').val()) + 1;
+                    $('input[name=userIdValue]').val(presentUserId);
+                    $('input[name=userID]').val('u'+presentUserId.toString().padStart(6, '0'));
+
+                    $('input[name=firstName]').val('');
+                    $('input[name=lastName]').val('');
+                    $('input[name=emailAddress]').val('');
+                    $('input[name=phone]').val('');
+                    $('input[name=userID]').val($('input[name=userID]').val());
+                    //$('input[name=country]').val('');
+                    $('input[name=password]').val($('input[name=passwordValue]').val());
                     $("textarea#message").val('');
+                    $('input[name=ctc_id]').val('');
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     alert(errorThrown);
                 }
             });
         }
-
+        function disappear() {
+            $('.addModal').addClass('invisible');
+        }
     </script>
 <?php
 }

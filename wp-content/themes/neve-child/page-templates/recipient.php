@@ -43,8 +43,9 @@ if ( have_posts() ) {
 
 ?>
     <div class="other_elements">
-		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="theme_url" />
+		<input type="hidden" value="<?php bloginfo('template_directory');?>" id="past_theme_url" />
         <input type="hidden" value="<?=home_url();?>" id="site_url" />
+        <input type="hidden" value="<?=get_stylesheet_directory_uri();?>" id="theme_url" />
         <input type='hidden' value='<?php echo $contact_id;  ?>' name='contactId' id='contactId' />
         <input type='hidden' name='fil_id' id='fil_id' />
     </div>

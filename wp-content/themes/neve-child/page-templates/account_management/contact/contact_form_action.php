@@ -8,7 +8,7 @@
     $ctc_phone = $_POST['mobileNumber'];
     $ctc_country = $_POST['country'];
     $ctc_type = $_POST['typeOfContact'];
-    $ctc_userid = $_POST['userID'];
+    $ctc_wp_login = $_POST['userID'];
     $ctc_password = $_POST['password'];
     $ctc_message = $_POST['message'];
     $ctc_account_id = $_POST['accountId'];
@@ -26,11 +26,11 @@
 
         $sql = "SELECT CTC_ID FROM contact WHERE CTC_ACCOUNT_ID = '" . $ctc_account_id . "'";
         $ctc_id = $wpdb->get_var($sql);
-        $ctc_wp_login = 'u' . str_pad($ctc_id, 6 , '0' , STR_PAD_LEFT);
 
         $sql = "UPDATE contact SET CTC_FIRST_NAME = '" . $ctc_first_name . "',
             CTC_LAST_NAME = '" . $ctc_last_name . "', 
-            CTC_EMAIL = '" . $ctc_email . "', 
+            CTC_EMAIL = '" . $ctc_email . "',
+            CTC_PHONE = '" . $ctc_phone . "',
             CTC_COUNTRY = '" . $ctc_country . "', 
             CTC_TYPE = '" . $ctc_type . "', 
             CTC_PASSWORD = '" . $ctc_password . "', 
@@ -50,10 +50,9 @@
         $sql = "SELECT MAX(CTC_ID) FROM contact";
 
         $ctc_id = $wpdb->get_var($sql) + 1;
-        $ctc_wp_login = 'u' . str_pad($ctc_id, 6 , '0' , STR_PAD_LEFT);
 
-        $sql = "INSERT INTO contact (CTC_ID, CTC_WP_LOGIN, CTC_FIRST_NAME, CTC_LAST_NAME, CTC_EMAIL, CTC_COUNTRY, CTC_TYPE, CTC_PASSWORD, CTC_MESSAGE, CTC_ACCOUNT_ID, CTC_WP_USER_ALIAS, CTC_CREATION_DATE, CTC_TRAIL_CODE)
-                VALUES ('$ctc_id','$ctc_wp_login','$ctc_first_name', '$ctc_last_name', '$ctc_email', '$ctc_country', '$ctc_type', '$ctc_password', '$ctc_message', '$ctc_account_id', '$ctc_wp_user_alias', '$current_time', '$ctc_trail_code')";
+        $sql = "INSERT INTO contact (CTC_ID, CTC_WP_LOGIN, CTC_FIRST_NAME, CTC_LAST_NAME, CTC_EMAIL, CTC_PHONE, CTC_COUNTRY, CTC_TYPE, CTC_PASSWORD, CTC_MESSAGE, CTC_ACCOUNT_ID, CTC_WP_USER_ALIAS, CTC_CREATION_DATE, CTC_TRAIL_CODE)
+                VALUES ('$ctc_id','$ctc_wp_login','$ctc_first_name', '$ctc_last_name', '$ctc_email', '$ctc_phone', '$ctc_country', '$ctc_type', '$ctc_password', '$ctc_message', '$ctc_account_id', '$ctc_wp_user_alias', '$current_time', '$ctc_trail_code')";
         $wpdb->query($sql);
         echo "inserted";
     }

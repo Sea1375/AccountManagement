@@ -62,9 +62,7 @@ if ( have_posts() ) {
 	</div>
 
     <div class="container mt-5 p-3">
-
         <h2 class="p-2 mx-3"><strong>My Account</strong></h2>
-
         <div class='form-field p-5'>
             <form action="account_form_action.php" method="POST" id="account" class="needs-validation" novalidate>
                 
