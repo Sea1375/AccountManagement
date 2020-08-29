@@ -11,24 +11,24 @@ if ( have_posts() ) {
     $ctc_account_id = wp_get_current_user()->ID;
     
     $sql = "SELECT MAX(CTC_ID) FROM CONTACT";
-    $userID = !$wpdb->get_var($sql) ? 0 : $wpdb->get_var($sql);
+    $userIdValue = !$wpdb->get_var($sql) ? 1 : $wpdb->get_var($sql) + 1;
     $password = wp_generate_password ( $length = 12, $special_chars = true, $extra_special_chars = false );
 
     $sql = "SELECT COUNT(CTC_TYPE) FROM CONTACT WHERE CTC_TYPE = 'GUARDIAN'";
     $result = $wpdb->get_var($sql);
-    $guardian_popup = $result < 4 ? 'we need at least 3 to make the service work.' : '' ;
+    $guardian_popup = $result < 4 ? 'we need at least 3 to make the service work.<br>' : null ;
 
     $sql = "SELECT COUNT(CTC_TYPE) FROM CONTACT WHERE CTC_TYPE = 'RECIPIENT'";
     $rep_count = $wpdb->get_var($sql);
-    $recipient_popup = $rep_count == 0 ? 'At present, there are not recipient.' : '' ;
+    $recipient_popup = $rep_count == 0 ? 'At present, there are not recipient.<br>' : null ;
 
-    $sql = "SELECT PLN_NB_RECIP FROM PLAN, ACCOUNT WHERE ACT_ID = '" . $ctc_account_id . "' AND ACT_PLAN = 'PLN_CODE'";
+    $sql = "SELECT PLN_NB_RECIP FROM PLAN, ACCOUNT WHERE ACCOUNT.ACT_ID = '" . $ctc_account_id . "' AND ACCOUNT.ACT_PLAN = PLAN.PLN_CODE";
     $result = $wpdb->get_var($sql);
-    $recipient_max_popup =  $result > $rep_count? 'The count of recipient is exceeded.' : '';
+    $recipient_max_popup =  $result > $rep_count? 'The count of recipient is exceeded.<br>' : null;
 
     $sql = "SELECT ACT_PLAN FROM ACCOUNT WHERE ACT_ID = '" . $ctc_account_id . "'";
     $plan = $wpdb->get_var($sql);
-
+    $state = $plan == 'FREE' ? 'disabled' : '';
 ?>    
     <div class="other_elements">
 	    <input type="hidden" value="<?php bloginfo('template_directory');?>" id="past_theme_url" />
@@ -50,7 +50,7 @@ if ( have_posts() ) {
             <div class="d-flex justify-content-around m-3">
                 <button type="button" onclick='add_fill()'>Add</button>
                 <button type="button"  data-toggle="modal" data-target="#deleteModal">Delete</button>
-                <a href='<?=home_url();?>'><button type="button">Close</button></a>
+                <button type="button" onclick="closeButton()">Close</button>
             </div>
 
             <div class='addModal p-5 mt-5 invisible'>
@@ -58,7 +58,7 @@ if ( have_posts() ) {
                     <input type = 'hidden' name='accountId' value=<?php echo $ctc_account_id; ?> id='accountId' />
                     <input type='hidden' id='ctc_id' name='ctc_id' />
 
-                    <input type='hidden' id='userIdValue' name='userIdValue' value=<?php echo $userID; ?> />
+                    <input type='hidden' id='userIdValue' name='userIdValue' value=<?php echo $userIdValue; ?> />
                     <input type='hidden' id='passwordValue' name='passwordValue' value=<?php echo $password; ?> />
 
                     <div class='mx-5 p-2'><h4 class='mx-5'>Contact Information</h4></div>
@@ -111,7 +111,7 @@ if ( have_posts() ) {
                     </div>
 
                     <div class="form-check mx-5 my-3 ">
-                        <input type="checkbox" name="addressCheck" required> I certify I live in the country mentioned above
+                        <input type="checkbox" name="addressCheck" required> I certify this contact lives in the country mentioned above
                         <div class="valid-feedback">Valid.</div>
                         <div class="invalid-feedback">Check this checkbox to continue.</div>
                     </div>
@@ -126,7 +126,7 @@ if ( have_posts() ) {
                                 </div>
                                 <div class="col-12 col-lg-2">
                                     <div class="radio">
-                                        <label><input type="radio" name="typeOfContact" value='INSIDER'> Insider</label>
+                                        <label><input type="radio" name="typeOfContact" value='INSIDER' <?php echo $state; ?>> Insider</label>
                                     </div>
                                 </div>
                                 <div class="col-12 col-lg-2">
@@ -136,7 +136,7 @@ if ( have_posts() ) {
                                 </div>
                                 <div class="col-12 col-lg-3">
                                     <div class="radio">
-                                        <label><input type="radio" name="typeOfContact" value='INSIDER_RECIP'> Insider & Recipient</label>
+                                        <label><input type="radio" name="typeOfContact" value='INSIDER_RECIP' <?php echo $state; ?>> Insider & Recipient</label>
                                     </div>
                                 </div>
                                 <div class="col-12 col-lg-3">
@@ -179,7 +179,7 @@ if ( have_posts() ) {
 
                 <div class="d-flex justify-content-around m-3">
                     <button type="button" onclick='save()'>Save</button>
-                    <button type="button" data-toggle="modal" data-target="#cancelModal" >Close</button>
+                    <button type="button" onclick='cancel()'>Cancel</button>
                 </div>
             </div>
         </div>
@@ -256,6 +256,31 @@ if ( have_posts() ) {
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="initPopup">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Please pay attention.</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <?php echo $guardian_popup; ?>
+                        <?php echo $recipient_popup; ?>
+                        <?php echo $recipient_max_popup; ?>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class='modal_button'>Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -306,7 +331,17 @@ if ( have_posts() ) {
         var ctc_ids, stop;
 
         getCountryName();
-        refresh_table(); 
+        refresh_table();
+
+        initFunction();
+        function initFunction() {
+            const guardian_popup = '<?php echo $guardian_popup; ?>';
+            const recipient_popup = '<?php $recipient_popup; ?>';
+            const recipient_max_popup = '<?php $recipient_max_popup;?>';
+            if(guardian_popup != null || recipient_popup != null || recipient_max_popup != null) {
+                $('#initPopup').modal('show');
+            }
+        }
 
         function getCountryName() {
             var request_url = $('#theme_url').val() + '/page-templates/account_management/get_countryName.php';
@@ -332,8 +367,6 @@ if ( have_posts() ) {
         }
 
        function save() {
-            console.log($('input[name=userID]').val());
-
             stop = 'N';
             validate();
             if(stop == 'Y') return;
@@ -364,6 +397,10 @@ if ( have_posts() ) {
                     console.log(data);
                     $('.save-modal-body').html('Your contact information has been ' + data + ' correctly.');
                     $('#saveModal').modal('show');
+                    if(data == 'inserted') {
+                        var presentUserIdValue = parseInt($('input[name=userIdValue]').val()) + 1;
+                        $('input[name=userIdValue]').val(presentUserIdValue);
+                    }
                     refresh_table();
                 },
                 error: function (jXHR, textStatus, errorThrown) {
@@ -399,7 +436,7 @@ if ( have_posts() ) {
                 url: $('#theme_url').val() + '/page-templates/account_management/contact/delete_row.php',
                 data: { ctc_id: $('input[name=ctc_id]').val()}, 
                 success:function(data){
-                    refresh_table();
+                    //refresh_table();
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     alert(errorThrown);
@@ -408,14 +445,17 @@ if ( have_posts() ) {
         }
         function add_fill() {
             $('.addModal').removeClass('invisible');
-            if($('input[name=ctc_id]').val() == '') return;
+            if($('input[name=ctc_id]').val() == '') {
+                refresh_table();
+                return;
+            }
             $.ajax({
                 type: "POST",
                 url: $('#theme_url').val() + '/page-templates/account_management/contact/add_fill.php',
                 data: { ctc_id: $('input[name=ctc_id]').val()}, 
-                success:function(data){
+                success:function(data) {
                     var dat = JSON.parse(data);
-                    
+
                     $('input[name=firstName]').val(dat.CTC_FIRST_NAME);
                     $('input[name=lastName]').val(dat.CTC_LAST_NAME);
                     $('input[name=emailAddress]').val(dat.CTC_EMAIL);
@@ -432,10 +472,9 @@ if ( have_posts() ) {
                             break;
                         }
                     }
-                    
-                    
+
                     //$('input[name=typeOfContact][value=dat.CTC_TYPE]').checked = true;
-                    //refresh_table();
+                    // refresh_table();
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     alert(errorThrown);
@@ -443,7 +482,7 @@ if ( have_posts() ) {
             });
 
         }
-        function refresh_table() {            
+        function refresh_table() {
             $.ajax({
                 type: "POST",
                 url: $('#theme_url').val() + '/page-templates/account_management/contact/refresh_table.php',
@@ -453,9 +492,10 @@ if ( have_posts() ) {
                     var tableContent = data.split("###")[1];
                     $('#contactTable').html(tableContent);
 
-                    const presentUserId = parseInt($('input[name=userIdValue]').val()) + 1;
-                    $('input[name=userIdValue]').val(presentUserId);
+                    var presentUserId = $('input[name=userIdValue]').val();
                     $('input[name=userID]').val('u'+presentUserId.toString().padStart(6, '0'));
+
+                    console.log($('input[name=userID]').val());
 
                     $('input[name=firstName]').val('');
                     $('input[name=lastName]').val('');
@@ -474,6 +514,14 @@ if ( have_posts() ) {
         }
         function disappear() {
             $('.addModal').addClass('invisible');
+        }
+        function cancel() {
+            refresh_table();
+            $('.addModal').addClass('invisible');
+        }
+        function closeButton() {
+            $('.addModal').removeClass('invisible');
+            $('#cancelModal').modal('show');
         }
     </script>
 <?php
